@@ -1,5 +1,6 @@
 'use client';
 
+import Script from 'next/script';
 import { motion } from 'framer-motion';
 import AddToCartButton from '@/components/AddToCartButton';
 
@@ -236,6 +237,58 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* Dati strutturati Product (JSON-LD) */}
+      <Script id="lr-products-jsonld" type="application/ld+json">
+        {JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          itemListElement: [
+            {
+              '@type': 'ListItem',
+              position: 1,
+              item: {
+                '@type': 'Product',
+                name: 'Hyppopothesis — Tee',
+                image: [
+                  'https://www.lagoonrebelwear.com/zoomania-hyppopothesis-front.png',
+                  'https://www.lagoonrebelwear.com/zoomania-hyppopothesis-back.png'
+                ],
+                brand: { '@type': 'Brand', name: 'Lagoon Rebel Wear' },
+                sku: 'tee-lr-nero',
+                offers: {
+                  '@type': 'Offer',
+                  price: '29.00',
+                  priceCurrency: 'EUR',
+                  availability: 'https://schema.org/InStock',
+                  url: 'https://www.lagoonrebelwear.com/'
+                }
+              }
+            },
+            {
+              '@type': 'ListItem',
+              position: 2,
+              item: {
+                '@type': 'Product',
+                name: 'Hyppopothesis — Hoodie',
+                image: [
+                  'https://www.lagoonrebelwear.com/zoomania-hyppopothesis-hoodie-front.png',
+                  'https://www.lagoonrebelwear.com/zoomania-hyppopothesis-hoodie-back.png'
+                ],
+                brand: { '@type': 'Brand', name: 'Lagoon Rebel Wear' },
+                sku: 'hoodie-lr',
+                offers: {
+                  '@type': 'Offer',
+                  price: '59.00',
+                  priceCurrency: 'EUR',
+                  availability: 'https://schema.org/InStock',
+                  url: 'https://www.lagoonrebelwear.com/'
+                }
+              }
+            }
+          ]
+        })}
+      </Script>
     </>
   );
 }
