@@ -90,9 +90,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        {/* Left: logo + hamburger */}
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-neutral-800/75 backdrop-blur-sm">
+      <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
         <div className="flex items-center gap-3">
           <button
             aria-label="Apri menu"
@@ -102,33 +101,31 @@ export default function Navbar() {
             <IconMenu />
           </button>
 
-          {/* LOGO “hacked” bianco via CSS filter, responsive per device */}
+          {/* Logo grande + “hack” bianco */}
           <Link href="/" className="flex items-center gap-2" aria-label="Lagoon Rebel Wear">
             <Image
               src="/Logo.png"
               alt="Lagoon Rebel Wear"
-              width={160}
-              height={40}
+              width={260}
+              height={64}
               priority
-              sizes="(max-width:480px) 112px, (max-width:768px) 136px, 160px"
-              className="h-6 w-auto sm:h-7 md:h-8 lg:h-9
+              sizes="(max-width:480px) 160px, (max-width:768px) 200px, 260px"
+              className="h-10 w-auto sm:h-12 md:h-[3.25rem] lg:h-16
                          invert brightness-0 contrast-200
-                         drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"
+                         drop-shadow-[0_0_14px_rgba(255,255,255,0.35)]"
             />
           </Link>
         </div>
 
-        {/* Center: link desktop */}
         <div className="hidden items-center gap-6 md:flex">
           <Link href="/search" className="text-sm text-white/90 hover:text-white">Cerca</Link>
           <Link href="/contact" className="text-sm text-white/90 hover:text-white">Contatti</Link>
         </div>
 
-        {/* Right: azioni */}
         <div className="flex items-center gap-2">
           <Link
             href="/search"
-            className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
           >
             <IconSearch />
             <span className="hidden sm:inline">Cerca</span>
@@ -140,14 +137,14 @@ export default function Navbar() {
             <>
               <Link
                 href="/account"
-                className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-white ring-1 ring-white/10 hover:bg-white/5"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/5"
               >
                 <IconUser />
                 <span className="hidden sm:inline">Account</span>
               </Link>
               <button
                 onClick={onLogout}
-                className="rounded-md px-3 py-1.5 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                className="rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
               >
                 Esci
               </button>
@@ -155,7 +152,7 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
             >
               <IconUser />
               <span className="hidden sm:inline">Accedi</span>
@@ -164,7 +161,7 @@ export default function Navbar() {
 
           <Link
             href="/cart"
-            className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
           >
             <IconCart />
             <span className="hidden sm:inline">Carrello</span>
@@ -173,9 +170,8 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile panel */}
       {mobileOpen && (
-        <div className="border-t border-white/10 bg-black/90 md:hidden">
+        <div className="border-t border-white/10 bg-neutral-900/90 md:hidden">
           <div className="mx-auto max-w-6xl px-4 py-3">
             <div className="flex flex-col gap-2">
               <Link
