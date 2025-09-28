@@ -1,83 +1,61 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { supabase } from '@/lib/supabase';
+import Link from 'next/link';
 
-export default function ConfirmPage() {
-  const params = useSearchParams();
-  const [state, setState] = useState({
-    status: 'loading',
-    title: 'Conferma in corso…',
-    message: 'Stiamo attivando il tuo account Lagoon Rebel Wear.'
-  });
+function ConfirmClient() {
+  const sp = useSearchParams();
+  const status = sp.get('status') || 'ok';
+  const message = sp.get('message') || null;
 
-  useEffect(() => {
-    const run = async () => {
-      try {
-        // Nuovo formato Supabase: ?code=...
-        const code = params.get('code');
-        if (code) {
-          const { error } = await supabase.auth.exchangeCodeForSession({ code });
-          if (error) throw error;
-          setState({
-            status: 'ok',
-            title: 'Registrazione completata!',
-            message: 'Benvenuto in Lagoon Rebel Wear. Ti reindirizziamo al tuo account…'
-          });
-          setTimeout(() => (window.location.href = '/account'), 1200);
-          return;
-        }
-
-        // Fallback per vecchi link con hash
-        if (typeof window !== 'undefined' && window.location.hash.includes('access_token')) {
-          const hash = new URLSearchParams(window.location.hash.slice(1));
-          const access_token = hash.get('access_token');
-          const refresh_token = hash.get('refresh_token');
-          if (access_token && refresh_token) {
-            const { error } = await supabase.auth.setSession({ access_token, refresh_token });
-            if (error) throw error;
-            setState({
-              status: 'ok',
-              title: 'Registrazione completata!',
-              message: 'Benvenuto in Lagoon Rebel Wear. Ti reindirizziamo al tuo account…'
-            });
-            setTimeout(() => (window.location.href = '/account'), 1200);
-            return;
-          }
-        }
-
-        setState({
-          status: 'error',
-          title: 'Link non valido o scaduto',
-          message: 'Richiedi una nuova conferma o riprova ad accedere.'
-        });
-      } catch (e) {
-        setState({
-          status: 'error',
-          title: 'Errore durante la conferma',
-          message: e.message || 'Si è verificato un errore inatteso.'
-        });
-      }
-    };
-    run();
-  }, [params]);
+  const title =
+    status === 'error'
+      ? 'Conferma non riuscita'
+      : status === 'success'
+      ? 'Email confermata'
+      : 'Verifica completata';
 
   return (
-    <main className="min-h-[60vh] flex items-center justify-center px-6 text-center">
-      <div className="max-w-md">
-        <h1 className="text-3xl font-bold">{state.title}</h1>
-        <p className={`${state.status === 'error' ? 'text-red-400' : 'text-white/80'} mt-3`}>
-          {state.message}
+    <main className="mx-auto max-w-xl px-4 pt-24 pb-16">
+      <h1 className="text-2xl font-semibold text-white">{title}</h1>
+      {message ? (
+        <p className="mt-3 text-white/70">{message}</p>
+      ) : (
+        <p className="mt-3 text-white/70">
+          Se non hai ancora ricevuto l’email, controlla la posta indesiderata oppure riprova.
         </p>
+      )}
 
-        {state.status === 'error' && (
-          <div className="mt-6 flex flex-col gap-3">
-            <a href="/login" className="px-5 py-2 rounded-md bg-white text-black font-semibold">Accedi</a>
-            <a href="/signup" className="px-5 py-2 rounded-md border border-white/30">Crea un nuovo account</a>
-          </div>
-        )}
+      <div className="mt-8 flex gap-3">
+        <Link
+          href="/login"
+          className="rounded-md px-4 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
+        >
+          Accedi
+        </Link>
+        <Link
+          href="/"
+          className="rounded-md px-4 py-2 text-sm font-medium text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+        >
+          Torna alla Home
+        </Link>
       </div>
     </main>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <main className="mx-auto max-w-xl px-4 pt-24 pb-16">
+          <h1 className="text-2xl font-semibold text-white">Verifica in corso…</h1>
+          <p className="mt-3 text-white/70">Attendi qualche istante.</p>
+        </main>
+      }
+    >
+      <ConfirmClient />
+    </Suspense>
   );
 }
