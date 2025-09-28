@@ -3,41 +3,124 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+
 export default function AuthForm({ mode = 'login' }) {
   // mode: 'login' | 'signup'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [canResend, setCanResend] = useState(false);
+
+  const normalizeEmail = (v) => v.trim().toLowerCase();
 
   const onSignup = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMsg(null);
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ||
-  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+    setCanResend(false);
 
-const { error } = await supabase.auth.signUp({
-  email,
-  password,
-  options: {
-    emailRedirectTo: `${SITE_URL}/auth/confirm`,
-  },
-});
+    const emailNorm = normalizeEmail(email);
+
+    const { data, error } = await supabase.auth.signUp({
+      email: emailNorm,
+      password,
+      options: { emailRedirectTo: `${SITE_URL}/auth/confirm` },
+    });
+
     setLoading(false);
-    if (error) setMsg({ type: 'error', text: error.message });
-    else setMsg({ type: 'success', text: 'Registrazione inviata! Controlla la tua email per confermare.' });
+
+    // 1) Errore esplicito
+    if (error) {
+      const text = error.message || 'Registrazione non riuscita.';
+      const already =
+        /already\s+registered/i.test(text) ||
+        /email address has already been registered/i.test(text) ||
+        /già\s+registrat/i.test(text);
+
+      if (already) {
+        setMsg({
+          type: 'info',
+          text:
+            'Questa email risulta già registrata. Prova ad accedere oppure rimanda la mail di conferma se non l’hai ancora ricevuta.',
+        });
+        setCanResend(true);
+        return;
+      }
+
+      setMsg({ type: 'error', text });
+      return;
+    }
+
+    // 2) Nessun errore ma SUPABASE segnala duplicato in modo implicito:
+    //    - data.user === null  (utente esiste già)
+    //    - oppure data.user.identities === []
+    const identities = data?.user?.identities;
+    const implicitDuplicate =
+      !data?.user || (Array.isArray(identities) && identities.length === 0);
+
+    if (implicitDuplicate) {
+      setMsg({
+        type: 'info',
+        text:
+          'Questa email risulta già registrata. Se non hai ancora confermato, puoi farti rinviare la mail di conferma.',
+      });
+      setCanResend(true);
+      return;
+    }
+
+    // 3) Registrazione nuova OK
+    setMsg({
+      type: 'success',
+      text: 'Registrazione inviata! Controlla la tua email e clicca “Conferma”.',
+    });
+  };
+
+  const onResend = async () => {
+    setLoading(true);
+    setMsg(null);
+    try {
+      const emailNorm = normalizeEmail(email);
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: emailNorm,
+        options: { emailRedirectTo: `${SITE_URL}/auth/confirm` },
+      });
+      if (error) {
+        setMsg({ type: 'error', text: error.message });
+      } else {
+        setMsg({
+          type: 'success',
+          text: 'Nuova email di conferma inviata. Controlla anche la cartella spam.',
+        });
+      }
+    } catch (e) {
+      setMsg({ type: 'error', text: e.message || 'Impossibile rimandare la conferma.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const onLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMsg(null);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email: normalizeEmail(email),
+      password,
+    });
+
     setLoading(false);
-    if (error) setMsg({ type: 'error', text: error.message });
-    else window.location.href = '/account';
+    if (error) {
+      setMsg({ type: 'error', text: error.message });
+    } else {
+      // ricarica la home come richiesto
+      window.location.href = '/';
+    }
   };
 
   const isLogin = mode === 'login';
@@ -77,8 +160,28 @@ const { error } = await supabase.auth.signUp({
         </button>
       </form>
 
+      {!isLogin && canResend && (
+        <div className="mt-3">
+          <button
+            onClick={onResend}
+            disabled={loading}
+            className="w-full px-5 py-2 rounded-md border border-white/30 hover:bg-white/10 disabled:opacity-60"
+          >
+            Rimanda email di conferma
+          </button>
+        </div>
+      )}
+
       {msg && (
-        <p className={`mt-4 text-sm ${msg.type === 'error' ? 'text-red-400' : 'text-emerald-400'}`}>
+        <p
+          className={`mt-4 text-sm ${
+            msg.type === 'error'
+              ? 'text-red-400'
+              : msg.type === 'success'
+              ? 'text-emerald-400'
+              : 'text-white/80'
+          }`}
+        >
           {msg.text}
         </p>
       )}
@@ -93,4 +196,3 @@ const { error } = await supabase.auth.signUp({
     </main>
   );
 }
-

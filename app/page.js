@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import AddToCartButton from '@/components/AddToCartButton';
 
 // Variants riutilizzabili
 const fadeUp = {
@@ -17,7 +18,7 @@ const cardIn = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-// CTA stile editoriale (linea–testo–linea) con micro-ink reveal
+// CTA stile editoriale (linea–testo–linea)
 function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
   return (
     <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
@@ -36,7 +37,7 @@ export default function Home() {
     <>
       {/* HERO animato */}
       <main className="relative h-screen w-full overflow-hidden bg-neutral-900">
-        {/* Video di sfondo con micro Ken Burns */}
+        {/* Video di sfondo */}
         <motion.video
           autoPlay
           loop
@@ -50,13 +51,13 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay cinematografico */}
+        {/* Overlay */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* Contenuto HERO — sinistra, con animazioni */}
+        {/* Contenuto HERO */}
         <motion.div
           className="relative z-10 h-full"
           initial="hidden"
@@ -104,7 +105,7 @@ export default function Home() {
         </motion.div>
       </main>
 
-      {/* SEZIONE SHOP con animazioni su grid/cards */}
+      {/* SEZIONE SHOP */}
       <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -121,7 +122,7 @@ export default function Home() {
             </motion.p>
           </motion.div>
 
-          {/* Grid animata */}
+          {/* Grid */}
           <motion.div
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden"
@@ -130,11 +131,10 @@ export default function Home() {
             variants={stagger}
           >
             {/* CARD: Tee */}
-            <motion.a
-              href="#"
+            <motion.div
               variants={cardIn}
               whileHover={{ y: -4 }}
-              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 block"
+              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
                 <img
@@ -153,21 +153,32 @@ export default function Home() {
                   Zoomania
                 </span>
               </div>
-              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex items-center justify-between">
-                <div className="min-w-0">
-                  <h3 className="font-semibold truncate">Hyppopothesis — Tee</h3>
-                  <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold truncate">Hyppopothesis — Tee</h3>
+                    <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+                  </div>
+                  <span className="text-white/90 font-semibold whitespace-nowrap">€29,00</span>
                 </div>
-                {/* <span className="text-white/90 font-semibold whitespace-nowrap">€29,00</span> */}
+                <AddToCartButton
+                  id="tee-lr-nero"
+                  title="Hyppopothesis — Tee"
+                  price={29}
+                  size="M"
+                  variant="Nero"
+                  className="w-full"
+                >
+                  Aggiungi al carrello
+                </AddToCartButton>
               </div>
-            </motion.a>
+            </motion.div>
 
             {/* CARD: Hoodie */}
-            <motion.a
-              href="#"
+            <motion.div
               variants={cardIn}
               whileHover={{ y: -4 }}
-              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 block"
+              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
                 <img
@@ -186,14 +197,26 @@ export default function Home() {
                   Zoomania
                 </span>
               </div>
-              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex items-center justify-between">
-                <div className="min-w-0">
-                  <h3 className="font-semibold truncate">Hyppopothesis — Hoodie</h3>
-                  <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold truncate">Hyppopothesis — Hoodie</h3>
+                    <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+                  </div>
+                  <span className="text-white/90 font-semibold whitespace-nowrap">€59,00</span>
                 </div>
-                {/* <span className="text-white/90 font-semibold whitespace-nowrap">€59,00</span> */}
+                <AddToCartButton
+                  id="hoodie-lr"
+                  title="Hyppopothesis — Hoodie"
+                  price={59}
+                  size="L"
+                  variant="Black"
+                  className="w-full"
+                >
+                  Aggiungi al carrello
+                </AddToCartButton>
               </div>
-            </motion.a>
+            </motion.div>
 
             {/* Placeholder */}
             <motion.div

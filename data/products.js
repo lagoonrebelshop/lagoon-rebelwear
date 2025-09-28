@@ -1,18 +1,23 @@
-export const products = [
+// data/products.js
+const products = [
   {
-    id: 'tee-hyppo',
-    title: 'Hyppopothesis — Tee',
-    subtitle: 'Venezia • Rebel Wear Series',
-    tags: ['tee', 't-shirt', 'zoomania', 'hyppopothesis', 'venezia'],
-    frontSrc: '/zoomania-hyppopothesis-front.png',
-    backSrc:  '/zoomania-hyppopothesis-back.png',
-  },
-  {
-    id: 'hoodie-hyppo',
+    id: 'hoodie-lr',
     title: 'Hyppopothesis — Hoodie',
-    subtitle: 'Venezia • Rebel Wear Series',
-    tags: ['hoodie', 'felpa', 'zoomania', 'hyppopothesis', 'venezia'],
-    frontSrc: '/zoomania-hyppopothesis-hoodie-front.png',
-    backSrc:  '/zoomania-hyppopothesis-hoodie-back.png',
+    price: 49.0,
+    image: '/zoomania-hyppopothesis-hoodie-front.png', // <-- esiste in /public
+    collection: 'Zoomania',
+    size: 'L',
+    variant: 'Black'
   },
+  {
+    id: 'tee-lr-nero',
+    title: 'T-Shirt Lagoon Rebel Nera',
+    price: 24.9,
+    image: '/zoomania-hyppopothesis-front.png', // <-- esiste in /public
+    collection: 'Zoomania',
+    size: 'M',
+    variant: 'Nero'
+  }
 ];
+
+export default products;
