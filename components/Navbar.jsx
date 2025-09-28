@@ -91,34 +91,43 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-neutral-800/80 backdrop-blur-sm">
-      <nav className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6">
-        <div className="flex items-center gap-3">
+      <nav className="relative mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6">
+        <div className="relative z-20 flex items-center gap-3">
           <button
             aria-label="Apri menu"
-            className="rounded-lg p-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5 md:hidden"
+            aria-expanded={mobileOpen ? 'true' : 'false'}
+            className="md:hidden rounded-lg p-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
             onClick={() => setMobileOpen((v) => !v)}
           >
             <IconMenu />
           </button>
+        </div>
 
-          {/* Logo centrale e molto più grande */}
-          <Link href="/" className="flex items-center justify-center flex-1" aria-label="Lagoon Rebel Wear">
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <Link
+            href="/"
+            aria-label="Lagoon Rebel Wear"
+            className="pointer-events-auto"
+          >
             <Image
               src="/Logo.png"
               alt="Lagoon Rebel Wear"
-              width={360}
-              height={100}
+              width={420}
+              height={120}
               priority
-              sizes="(max-width:480px) 200px, (max-width:768px) 280px, 360px"
-              className="h-16 sm:h-20 md:h-[5rem] lg:h-[5.5rem] w-auto
+              sizes="(max-width:480px) 240px, (max-width:768px) 320px, 420px"
+              className="h-20 sm:h-[5.5rem] md:h-[6rem] w-auto
                          invert brightness-0 contrast-200
                          drop-shadow-[0_0_18px_rgba(255,255,255,0.4)]"
             />
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link href="/search" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:text-white">
+        <div className="relative z-20 flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/search"
+            className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+          >
             <IconSearch />
             <span>Cerca</span>
           </Link>
@@ -127,28 +136,109 @@ export default function Navbar() {
             <span className="text-sm text-white/60">…</span>
           ) : user ? (
             <>
-              <Link href="/account" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white hover:text-white">
+              <Link
+                href="/account"
+                className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/5"
+              >
                 <IconUser />
                 <span>Account</span>
               </Link>
-              <button onClick={onLogout} className="hidden md:block px-3 py-2 text-sm text-white/90 hover:text-white">
+              <button
+                onClick={onLogout}
+                className="hidden md:block rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+              >
                 Esci
               </button>
             </>
           ) : (
-            <Link href="/login" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white hover:text-white">
+            <Link
+              href="/login"
+              className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
+            >
               <IconUser />
               <span>Accedi</span>
             </Link>
           )}
 
-          <Link href="/cart" className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:text-white">
+          <Link
+            href="/cart"
+            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+          >
             <IconCart />
             <span className="hidden sm:inline">Carrello</span>
             <CartBadge count={cartCount} />
           </Link>
         </div>
       </nav>
+
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
+            onClick={() => setMobileOpen(false)}
+          />
+          <div className="fixed left-0 right-0 top-24 z-50 border-t border-white/10 bg-neutral-900/95 md:hidden">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
+              <div className="flex flex-col gap-2">
+                <Link
+                  href="/search"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                >
+                  <IconSearch />
+                  <span>Cerca</span>
+                </Link>
+
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                >
+                  Contatti
+                </Link>
+
+                {user ? (
+                  <>
+                    <Link
+                      href="/account"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
+                    >
+                      <IconUser />
+                      <span>Account</span>
+                    </Link>
+                    <button
+                      onClick={() => { setMobileOpen(false); onLogout(); }}
+                      className="rounded-md px-3 py-2 text-left text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                    >
+                      Esci
+                    </button>
+                  </>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
+                  >
+                    <IconUser />
+                    <span>Accedi</span>
+                  </Link>
+                )}
+
+                <Link
+                  href="/cart"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                >
+                  <IconCart />
+                  <span>Carrello</span>
+                  <CartBadge count={cartCount} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </header>
   );
 }
