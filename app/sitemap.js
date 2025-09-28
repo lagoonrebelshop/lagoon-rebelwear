@@ -1,12 +1,9 @@
-export default async function sitemap() {
+export default function sitemap() {
   const base = 'https://www.lagoonrebelwear.com';
   return [
-    { url: `${base}/`, changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${base}/search`, changeFrequency: 'weekly', priority: 0.8 },
-    { url: `${base}/cart`, changeFrequency: 'weekly', priority: 0.6 },
-    { url: `${base}/contact`, changeFrequency: 'yearly', priority: 0.3 },
-    { url: `${base}/privacy`, changeFrequency: 'yearly', priority: 0.1 },
-    { url: `${base}/cookies`, changeFrequency: 'yearly', priority: 0.1 },
-    { url: `${base}/terms`, changeFrequency: 'yearly', priority: 0.1 },
+    { url: `${base}/`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 1 },
+    { url: `${base}/search`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/cart`, lastModified: new Date().toISOString(), changeFrequency: 'weekly', priority: 0.5 },
+    { url: `${base}/account`, lastModified: new Date().toISOString(), changeFrequency: 'monthly', priority: 0.4 },
   ];
 }
