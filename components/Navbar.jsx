@@ -15,22 +15,22 @@ function CartBadge({ count }) {
 }
 
 const IconMenu = (props) => (
-  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" {...props}>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" {...props}>
     <path fill="currentColor" d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
   </svg>
 );
 const IconSearch = (props) => (
-  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" {...props}>
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
     <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20 15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
   </svg>
 );
 const IconUser = (props) => (
-  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" {...props}>
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
     <path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V22h19.2v-2.8c0-3.2-6.4-4.8-9.6-4.8z"/>
   </svg>
 );
 const IconCart = (props) => (
-  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" {...props}>
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
     <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14h9.66c.75 0 1.4-.41 1.73-1.03l3.27-6.14A1 1 0 0021 5H6.21l-.94-2H2v2h2l3.6 7.59L6.25 15A2 2 0 008 18h12v-2H8l1.1-2z"/>
   </svg>
 );
@@ -90,8 +90,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-neutral-800/75 backdrop-blur-sm">
-      <nav className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-neutral-800/80 backdrop-blur-sm">
+      <nav className="mx-auto flex h-24 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <button
             aria-label="Apri menu"
@@ -101,137 +101,54 @@ export default function Navbar() {
             <IconMenu />
           </button>
 
-          {/* Logo grande + “hack” bianco */}
-          <Link href="/" className="flex items-center gap-2" aria-label="Lagoon Rebel Wear">
+          {/* Logo centrale e molto più grande */}
+          <Link href="/" className="flex items-center justify-center flex-1" aria-label="Lagoon Rebel Wear">
             <Image
               src="/Logo.png"
               alt="Lagoon Rebel Wear"
-              width={260}
-              height={64}
+              width={360}
+              height={100}
               priority
-              sizes="(max-width:480px) 160px, (max-width:768px) 200px, 260px"
-              className="h-10 w-auto sm:h-12 md:h-[3.25rem] lg:h-16
+              sizes="(max-width:480px) 200px, (max-width:768px) 280px, 360px"
+              className="h-16 sm:h-20 md:h-[5rem] lg:h-[5.5rem] w-auto
                          invert brightness-0 contrast-200
-                         drop-shadow-[0_0_14px_rgba(255,255,255,0.35)]"
+                         drop-shadow-[0_0_18px_rgba(255,255,255,0.4)]"
             />
           </Link>
         </div>
 
-        <div className="hidden items-center gap-6 md:flex">
-          <Link href="/search" className="text-sm text-white/90 hover:text-white">Cerca</Link>
-          <Link href="/contact" className="text-sm text-white/90 hover:text-white">Contatti</Link>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Link
-            href="/search"
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-          >
+        <div className="flex items-center gap-3">
+          <Link href="/search" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:text-white">
             <IconSearch />
-            <span className="hidden sm:inline">Cerca</span>
+            <span>Cerca</span>
           </Link>
 
           {loading ? (
             <span className="text-sm text-white/60">…</span>
           ) : user ? (
             <>
-              <Link
-                href="/account"
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/5"
-              >
+              <Link href="/account" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white hover:text-white">
                 <IconUser />
-                <span className="hidden sm:inline">Account</span>
+                <span>Account</span>
               </Link>
-              <button
-                onClick={onLogout}
-                className="rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-              >
+              <button onClick={onLogout} className="hidden md:block px-3 py-2 text-sm text-white/90 hover:text-white">
                 Esci
               </button>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
-            >
+            <Link href="/login" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm text-white hover:text-white">
               <IconUser />
-              <span className="hidden sm:inline">Accedi</span>
+              <span>Accedi</span>
             </Link>
           )}
 
-          <Link
-            href="/cart"
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-          >
+          <Link href="/cart" className="flex items-center gap-2 px-3 py-2 text-sm text-white/90 hover:text-white">
             <IconCart />
             <span className="hidden sm:inline">Carrello</span>
             <CartBadge count={cartCount} />
           </Link>
         </div>
       </nav>
-
-      {mobileOpen && (
-        <div className="border-t border-white/10 bg-neutral-900/90 md:hidden">
-          <div className="mx-auto max-w-6xl px-4 py-3">
-            <div className="flex flex-col gap-2">
-              <Link
-                href="/search"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                <IconSearch />
-                <span>Cerca</span>
-              </Link>
-
-              <Link
-                href="/contact"
-                onClick={() => setMobileOpen(false)}
-                className="rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                Contatti
-              </Link>
-
-              {user ? (
-                <>
-                  <Link
-                    href="/account"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
-                  >
-                    <IconUser />
-                    <span>Account</span>
-                  </Link>
-                  <button
-                    onClick={onLogout}
-                    className="rounded-md px-3 py-2 text-left text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-                  >
-                    Esci
-                  </button>
-                </>
-              ) : (
-                <Link
-                  href="/login"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
-                >
-                  <IconUser />
-                  <span>Accedi</span>
-                </Link>
-              )}
-
-              <Link
-                href="/cart"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-              >
-                <IconCart />
-                <span>Carrello</span>
-                <CartBadge count={cartCount} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }
