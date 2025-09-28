@@ -1,103 +1,218 @@
-import Image from "next/image";
+'use client';
+
+import { motion } from 'framer-motion';
+
+// Variants riutilizzabili
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const cardIn = {
+  hidden: { opacity: 0, y: 20, scale: 0.98 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+};
+
+// CTA stile editoriale (linea–testo–linea) con micro-ink reveal
+function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
+  return (
+    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
+      <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
+      <span className="mt-3 mb-3 tracking-[0.25em] text-sm font-semibold text-white/95 group-hover:text-white relative">
+        <span className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out bg-white/10" />
+        <span className="relative">{label}</span>
+      </span>
+      <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
+    </a>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      {/* HERO animato */}
+      <main className="relative h-screen w-full overflow-hidden bg-neutral-900">
+        {/* Video di sfondo con micro Ken Burns */}
+        <motion.video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
+          initial={{ scale: 1.04 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <source src="/Gondole01.mp4" type="video/mp4" />
+        </motion.video>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        {/* Overlay cinematografico */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
+
+        {/* Contenuto HERO — sinistra, con animazioni */}
+        <motion.div
+          className="relative z-10 h-full"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+        >
+          <div className="mx-auto max-w-6xl h-full flex items-end">
+            <div className="px-6 pb-20">
+              <motion.p
+                variants={fadeUp}
+                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
+              >
+                FALL / WINTER 2025 • VENEZIA
+              </motion.p>
+
+              <motion.h1
+                variants={fadeUp}
+                className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
+              >
+                Lagoon Rebel Wear
+              </motion.h1>
+
+              <motion.p
+                variants={fadeUp}
+                className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
+              >
+                Streetwear nato a Venezia. Ribelle, autentico, libero.
+              </motion.p>
+
+              <motion.div variants={fadeUp} className="mt-8">
+                <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Indizio scroll */}
+        <motion.div
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0, transition: { delay: 0.8 } }}
+        >
+          <span className="block text-white/70 text-xs tracking-[0.25em] text-center">SCORRI</span>
+          <div className="mt-1 h-5 w-px bg-white/60 mx-auto animate-pulse" />
+        </motion.div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+      {/* SEZIONE SHOP con animazioni su grid/cards */}
+      <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-center"
+          >
+            <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold">
+              Collezione Ribelle
+            </motion.h2>
+            <motion.p variants={fadeUp} className="text-white/70 mt-3">
+              <span className="font-semibold text-white">NEW:</span> Zoomania — Hyppopothesis
+            </motion.p>
+          </motion.div>
+
+          {/* Grid animata */}
+          <motion.div
+            className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={stagger}
+          >
+            {/* CARD: Tee */}
+            <motion.a
+              href="#"
+              variants={cardIn}
+              whileHover={{ y: -4 }}
+              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 block"
+            >
+              <div className="relative aspect-[4/5] w-full">
+                <img
+                  src="/zoomania-hyppopothesis-front.png"
+                  alt="Hyppopothesis Tee - Front"
+                  className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+                  loading="lazy"
+                />
+                <img
+                  src="/zoomania-hyppopothesis-back.png"
+                  alt="Hyppopothesis Tee - Back"
+                  className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                  loading="lazy"
+                />
+                <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
+                  Zoomania
+                </span>
+              </div>
+              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex items-center justify-between">
+                <div className="min-w-0">
+                  <h3 className="font-semibold truncate">Hyppopothesis — Tee</h3>
+                  <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+                </div>
+                {/* <span className="text-white/90 font-semibold whitespace-nowrap">€29,00</span> */}
+              </div>
+            </motion.a>
+
+            {/* CARD: Hoodie */}
+            <motion.a
+              href="#"
+              variants={cardIn}
+              whileHover={{ y: -4 }}
+              className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 block"
+            >
+              <div className="relative aspect-[4/5] w-full">
+                <img
+                  src="/zoomania-hyppopothesis-hoodie-front.png"
+                  alt="Hyppopothesis Hoodie - Front"
+                  className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+                  loading="lazy"
+                />
+                <img
+                  src="/zoomania-hyppopothesis-hoodie-back.png"
+                  alt="Hyppopothesis Hoodie - Back"
+                  className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                  loading="lazy"
+                />
+                <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
+                  Zoomania
+                </span>
+              </div>
+              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex items-center justify-between">
+                <div className="min-w-0">
+                  <h3 className="font-semibold truncate">Hyppopothesis — Hoodie</h3>
+                  <p className="text-white/70 text-sm truncate">Venezia • Rebel Wear Series</p>
+                </div>
+                {/* <span className="text-white/90 font-semibold whitespace-nowrap">€59,00</span> */}
+              </div>
+            </motion.a>
+
+            {/* Placeholder */}
+            <motion.div
+              variants={cardIn}
+              whileHover={{ y: -4 }}
+              className="rounded-2xl overflow-hidden border border-white/10 bg-[#2A2A2A]"
+            >
+              <div className="aspect-[4/5] w-full bg-[#3A3A3A]" />
+              <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold">Prossimo Drop</h3>
+                  <p className="text-white/70 text-sm">In arrivo…</p>
+                </div>
+                <span className="text-white/60 text-sm tracking-wide">—</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+    </>
   );
 }
