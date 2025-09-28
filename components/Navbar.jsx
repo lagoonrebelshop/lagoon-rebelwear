@@ -14,7 +14,6 @@ function CartBadge({ count }) {
   );
 }
 
-// icone SVG inline (nessuna dipendenza esterna)
 const IconMenu = (props) => (
   <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" {...props}>
     <path fill="currentColor" d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
@@ -69,9 +68,7 @@ export default function Navbar() {
     });
 
     readCartCount();
-    const onStorage = (e) => {
-      if (e.key === 'lr_cart') readCartCount();
-    };
+    const onStorage = (e) => { if (e.key === 'lr_cart') readCartCount(); };
     const onCustom = () => readCartCount();
     window.addEventListener('storage', onStorage);
     window.addEventListener('lr_cart_updated', onCustom);
@@ -104,20 +101,27 @@ export default function Navbar() {
           >
             <IconMenu />
           </button>
-          <Link href="/" className="flex items-center gap-2">
-            <Image src="/Logo.png" alt="Lagoon Rebel Wear" width={36} height={36} priority />
-            <span className="sr-only">Lagoon Rebel Wear</span>
+
+          {/* LOGO “hacked” bianco via CSS filter, responsive per device */}
+          <Link href="/" className="flex items-center gap-2" aria-label="Lagoon Rebel Wear">
+            <Image
+              src="/Logo.png"
+              alt="Lagoon Rebel Wear"
+              width={160}
+              height={40}
+              priority
+              sizes="(max-width:480px) 112px, (max-width:768px) 136px, 160px"
+              className="h-6 w-auto sm:h-7 md:h-8 lg:h-9
+                         invert brightness-0 contrast-200
+                         drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"
+            />
           </Link>
         </div>
 
         {/* Center: link desktop */}
         <div className="hidden items-center gap-6 md:flex">
-          <Link href="/search" className="text-sm text-white/90 hover:text-white">
-            Cerca
-          </Link>
-          <Link href="/contact" className="text-sm text-white/90 hover:text-white">
-            Contatti
-          </Link>
+          <Link href="/search" className="text-sm text-white/90 hover:text-white">Cerca</Link>
+          <Link href="/contact" className="text-sm text-white/90 hover:text-white">Contatti</Link>
         </div>
 
         {/* Right: azioni */}
