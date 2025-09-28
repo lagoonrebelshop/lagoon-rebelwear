@@ -14,11 +14,17 @@ export default function AuthForm({ mode = 'login' }) {
     e.preventDefault();
     setLoading(true);
     setMsg(null);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { emailRedirectTo: 'http://localhost:3000/auth/confirm' },
-    });
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
+
+const { error } = await supabase.auth.signUp({
+  email,
+  password,
+  options: {
+    emailRedirectTo: `${SITE_URL}/auth/confirm`,
+  },
+});
     setLoading(false);
     if (error) setMsg({ type: 'error', text: error.message });
     else setMsg({ type: 'success', text: 'Registrazione inviata! Controlla la tua email per confermare.' });
