@@ -1,28 +1,34 @@
-// app/layout.js
 import './globals.css';
 
 export const metadata = {
-  metadataBase: new URL('https://www.lagoonrebelwear.com'),
-  title: {
-    default: 'Lagoon Rebel Wear',
-    template: '%s | Lagoon Rebel Wear',
-  },
+  title: 'Lagoon Rebel Wear',
   description: 'Streetwear nato a Venezia. Ribelle, autentico, libero.',
+  metadataBase: new URL('https://www.lagoonrebelwear.com'),
   openGraph: {
-    type: 'website',
-    url: '/',
     title: 'Lagoon Rebel Wear',
     description: 'Streetwear nato a Venezia. Ribelle, autentico, libero.',
-    images: [{ url: '/og.jpg', width: 1200, height: 630, alt: 'Lagoon Rebel Wear' }],
+    url: 'https://www.lagoonrebelwear.com',
+    siteName: 'Lagoon Rebel Wear',
+    images: [
+      {
+        url: '/Logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Lagoon Rebel Wear',
+      },
+    ],
+    locale: 'it_IT',
+    type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Lagoon Rebel Wear',
     description: 'Streetwear nato a Venezia. Ribelle, autentico, libero.',
-    images: ['/og.jpg'],
+    images: ['/Logo.png'],
   },
   icons: {
     icon: '/favicon.png',
+    shortcut: '/favicon.png',
     apple: '/apple-touch-icon.png',
   },
   manifest: '/manifest.webmanifest',
@@ -31,9 +37,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="it">
-      <body className="bg-neutral-900 text-white antialiased">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
