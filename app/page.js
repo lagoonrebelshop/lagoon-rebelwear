@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import AddToCartButton from '@/components/AddToCartButton';
 
 // Variants riutilizzabili
@@ -137,17 +138,22 @@ export default function Home() {
               className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
-                <img
+                {/* front */}
+                <Image
                   src="/zoomania-hyppopothesis-front.png"
                   alt="Hyppopothesis Tee - Front"
+                  fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                  loading="lazy"
+                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
+                  priority={false}
                 />
-                <img
+                {/* back */}
+                <Image
                   src="/zoomania-hyppopothesis-back.png"
                   alt="Hyppopothesis Tee - Back"
+                  fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                  loading="lazy"
+                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
                 <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
                   Zoomania
@@ -181,17 +187,21 @@ export default function Home() {
               className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
-                <img
+                {/* front */}
+                <Image
                   src="/zoomania-hyppopothesis-hoodie-front.png"
                   alt="Hyppopothesis Hoodie - Front"
+                  fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                  loading="lazy"
+                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
-                <img
+                {/* back */}
+                <Image
                   src="/zoomania-hyppopothesis-hoodie-back.png"
                   alt="Hyppopothesis Hoodie - Back"
+                  fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                  loading="lazy"
+                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
                 <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
                   Zoomania
