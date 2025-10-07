@@ -9,7 +9,7 @@ export default function Footer() {
           <h3 className="font-bold text-lg">Lagoon Rebel — Newsletter</h3>
           <p className="text-white/70 text-sm mt-2">Drop esclusivi e news dalla Laguna.</p>
           {/* Sostituisci action con il tuo provider (Mailchimp/Formspree) */}
-          <form className="mt-4 flex gap-2" action="https://formspree.io/f/IL_TUO_ID" method="POST">
+          <form className="mt-4 flex gap-2" action="https://formspree.io/f/XZBQAqBd" method="POST">
             <input
               name="email"
               type="email"
