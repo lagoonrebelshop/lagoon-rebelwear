@@ -8,7 +8,7 @@ export default function Page() {
         Email: <a href="mailto:hello@lagoonrebelwear.it" className="underline">hello@lagoonrebelwear.it</a>
       </p>
 
-      <form className="mt-8 space-y-4" action="https://formspree.io/f/REPLACE" method="POST">
+      <form className="mt-8 space-y-4" action="https://formspree.io/f/IL_TUO_ID" method="POST">
         <input name="name" placeholder="Nome" required className="w-full px-4 py-2 rounded-md bg-white text-black"/>
         <input name="email" type="email" placeholder="Email" required className="w-full px-4 py-2 rounded-md bg-white text-black"/>
         <textarea name="message" placeholder="Messaggio" rows={5} required className="w-full px-4 py-2 rounded-md bg-white text-black"/>
