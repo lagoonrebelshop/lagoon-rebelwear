@@ -30,15 +30,15 @@ export const metadata = {
     images: ['/og.jpg'],
     creator: '@lagoonrebelwear',
   },
-  // Icone corrette per browser e iOS
+  // Icone + cache-busting versione
   icons: {
     icon: [
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon.ico' }, // fallback classico multi-size (16+32)
+      { url: '/favicon-32x32.png?v=20251007', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png?v=20251007', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico?v=20251007' }, // fallback classico multi-size (16+32)
     ],
-    shortcut: ['/favicon.ico'],
-    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+    shortcut: ['/favicon.ico?v=20251007'],
+    apple: [{ url: '/apple-touch-icon.png?v=20251007', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/manifest.webmanifest',
 };
