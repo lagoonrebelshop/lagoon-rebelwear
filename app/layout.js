@@ -11,21 +11,14 @@ export const metadata = {
     template: '%s | Lagoon Rebel Wear',
   },
   description: 'Streetwear veneziano ribelle: design originali, identità forte, qualità che dura.',
-  alternates: {
-    canonical: '/',
-  },
+  alternates: { canonical: '/' },
   openGraph: {
     title: 'Lagoon Rebel Wear',
     description: 'Streetwear veneziano ribelle: design originali, identità forte, qualità che dura.',
     url: 'https://www.lagoonrebelwear.com',
     siteName: 'Lagoon Rebel Wear',
     images: [
-      {
-        url: '/og.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Lagoon Rebel Wear — streetwear veneziano ribelle',
-      },
+      { url: '/og.jpg', width: 1200, height: 630, alt: 'Lagoon Rebel Wear — streetwear veneziano ribelle' },
     ],
     locale: 'it_IT',
     type: 'website',
@@ -37,10 +30,15 @@ export const metadata = {
     images: ['/og.jpg'],
     creator: '@lagoonrebelwear',
   },
+  // Icone corrette per browser e iOS
   icons: {
-    icon: '/favicon.png',
-    shortcut: '/favicon.png',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon.ico' }, // fallback classico multi-size (16+32)
+    ],
+    shortcut: ['/favicon.ico'],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/manifest.webmanifest',
 };
