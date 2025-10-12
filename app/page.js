@@ -38,11 +38,7 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      {/* NB: data-hero + CSS sotto: su mobile aggiungiamo offset = altezza navbar */}
-      <main
-        data-hero
-        className="relative h-[100svh] w-full overflow-hidden bg-neutral-900"
-      >
+      <main data-hero className="relative h-[100svh] w-full overflow-hidden bg-neutral-900">
         {/* Video di sfondo */}
         <motion.video
           autoPlay
@@ -71,10 +67,9 @@ export default function Home() {
           animate="visible"
           variants={stagger}
         >
-          {/* Wrapper per allineare il blocco testi in basso */}
           <div className="mx-auto max-w-6xl h-full flex items-end">
-            {/* padding più morbido su mobile, più ampio su desktop */}
-            <div className="px-6 pb-12 md:pb-20">
+            {/* Padding corretto mobile/desktop */}
+            <div className="px-6 pb-8 sm:pb-10 md:pb-20">
               <motion.p
                 variants={fadeUp}
                 className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
@@ -113,20 +108,30 @@ export default function Home() {
           <div className="mt-1 h-5 w-px bg-white/60 mx-auto animate-pulse" />
         </motion.div>
 
-        {/* CSS: offset mobile = altezza navbar (96px), desktop invariato */}
+        {/* CORREZIONE offset mobile */}
         <style jsx global>{`
-          :root { --nav-h: 0px; }
-
-          /* fino a 1024px (tablet inclusi) usiamo 96px di offset: 64px header + 16+16 padding */
-          @media (max-width: 1024px) {
-            :root { --nav-h: 96px; }
+          :root {
+            --nav-h: 0px;
           }
 
-          /* Applica l'offset solo al hero */
+          /* fino a 1024px (mobile e tablet) */
+          @media (max-width: 1024px) {
+            :root {
+              --nav-h: 96px;
+            }
+          }
+
           main[data-hero] {
-            /* sposta tutto (video incluso, perché assoluto rispetto al padding box) */
             padding-top: var(--nav-h);
             min-height: calc(100svh - var(--nav-h));
+          }
+
+          /* Riduci e armonizza padding per evitare gap visivo sotto il video */
+          @media (max-width: 768px) {
+            main[data-hero] .pb-8,
+            main[data-hero] .sm\\:pb-10 {
+              padding-bottom: 3rem !important;
+            }
           }
         `}</style>
       </main>
