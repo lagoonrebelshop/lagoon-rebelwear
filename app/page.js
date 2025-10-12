@@ -5,18 +5,22 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import AddToCartButton from '@/components/AddToCartButton';
 
-// Animazioni
+// Variants riutilizzabili
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
-const stagger = { visible: { transition: { staggerChildren: 0.12 } } };
+
+const stagger = {
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
 const cardIn = {
   hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-// CTA
+// CTA stile editoriale (linea–testo–linea)
 function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
   return (
     <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
@@ -34,18 +38,19 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
+      {/* NB: data-hero + CSS sotto: su mobile aggiungiamo offset = altezza navbar */}
       <main
-        className="relative w-full overflow-hidden bg-neutral-900 pt-[64px] md:pt-[80px]"
-        style={{ height: '100dvh' }} // viewport affidabile su iOS
+        data-hero
+        className="relative h-[100svh] w-full overflow-hidden bg-neutral-900"
       >
-        {/* Video fullscreen */}
+        {/* Video di sfondo */}
         <motion.video
           autoPlay
           loop
           muted
           playsInline
           preload="metadata"
-          className="absolute inset-0 h-full w-full object-cover will-change-transform"
+          className="absolute inset-0 w-full h-full object-cover will-change-transform"
           initial={{ scale: 1.04 }}
           animate={{ scale: 1 }}
           transition={{ duration: 6, ease: [0.22, 1, 0.36, 1] }}
@@ -53,64 +58,82 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay per contrasto */}
-        <div className="pointer-events-none absolute inset-0">
+        {/* Overlay */}
+        <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* CONTENUTO HERO — assoluto SOPRA al video, ancorato al fondo */}
+        {/* Contenuto HERO */}
         <motion.div
-          className="absolute inset-x-0 bottom-0 z-10"
+          className="relative z-10 h-full"
           initial="hidden"
           animate="visible"
           variants={stagger}
-          style={{
-            paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)', // niente spazio nero
-          }}
         >
-          <div className="mx-auto max-w-6xl w-full px-6 pb-4 md:pb-10">
-            <motion.p
-              variants={fadeUp}
-              className="mb-3 text-[11px] md:text-xs tracking-[0.25em] text-white/70"
-            >
-              FALL / WINTER 2025 • VENEZIA
-            </motion.p>
+          {/* Wrapper per allineare il blocco testi in basso */}
+          <div className="mx-auto max-w-6xl h-full flex items-end">
+            {/* padding più morbido su mobile, più ampio su desktop */}
+            <div className="px-6 pb-12 md:pb-20">
+              <motion.p
+                variants={fadeUp}
+                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
+              >
+                FALL / WINTER 2025 • VENEZIA
+              </motion.p>
 
-            <motion.h1
-              variants={fadeUp}
-              className="max-w-3xl text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white"
-            >
-              Lagoon Rebel Wear
-            </motion.h1>
+              <motion.h1
+                variants={fadeUp}
+                className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
+              >
+                Lagoon Rebel Wear
+              </motion.h1>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-3 max-w-xl text-base md:text-lg text-white/90"
-            >
-              Streetwear nato a Venezia. Ribelle, autentico, libero.
-            </motion.p>
+              <motion.p
+                variants={fadeUp}
+                className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
+              >
+                Streetwear nato a Venezia. Ribelle, autentico, libero.
+              </motion.p>
 
-            <motion.div variants={fadeUp} className="mt-8">
-              <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
-            </motion.div>
+              <motion.div variants={fadeUp} className="mt-8">
+                <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
         {/* Indicatore scroll */}
         <motion.div
-          className="absolute left-1/2 z-10 -translate-x-1/2 bottom-2 md:bottom-4"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0, transition: { delay: 0.8 } }}
         >
-          <span className="block text-center text-xs tracking-[0.25em] text-white/70">SCORRI</span>
-          <div className="mx-auto mt-1 h-5 w-px animate-pulse bg-white/60" />
+          <span className="block text-white/70 text-xs tracking-[0.25em] text-center">SCORRI</span>
+          <div className="mt-1 h-5 w-px bg-white/60 mx-auto animate-pulse" />
         </motion.div>
+
+        {/* CSS: offset mobile = altezza navbar (96px), desktop invariato */}
+        <style jsx global>{`
+          :root { --nav-h: 0px; }
+
+          /* fino a 1024px (tablet inclusi) usiamo 96px di offset: 64px header + 16+16 padding */
+          @media (max-width: 1024px) {
+            :root { --nav-h: 96px; }
+          }
+
+          /* Applica l'offset solo al hero */
+          main[data-hero] {
+            /* sposta tutto (video incluso, perché assoluto rispetto al padding box) */
+            padding-top: var(--nav-h);
+            min-height: calc(100svh - var(--nav-h));
+          }
+        `}</style>
       </main>
 
       {/* SEZIONE SHOP */}
-      <section id="shop" className="bg-neutral-900 px-6 py-16 text-white">
-        <div className="mx-auto max-w-6xl">
+      <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -120,7 +143,7 @@ export default function Home() {
             <motion.h2 variants={fadeUp} className="text-3xl md:text-4xl font-bold">
               Collezione Ribelle
             </motion.h2>
-            <motion.p variants={fadeUp} className="mt-3 text-white/70">
+            <motion.p variants={fadeUp} className="text-white/70 mt-3">
               <span className="font-semibold text-white">NEW:</span> Zoomania — Hyppopothesis
             </motion.p>
           </motion.div>
