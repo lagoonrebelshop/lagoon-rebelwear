@@ -38,16 +38,12 @@ export const metadata = {
     images: ['/og.jpg'],
     creator: '@lagoonrebelwear',
   },
-  // Icone + cache-busting versione
   icons: {
     icon: [
-      // Solo PNG versionati (niente ICO qui per evitare il tag auto-iniettato non versionato)
       { url: '/favicon-32x32.png?v=20251007', sizes: '32x32', type: 'image/png' },
       { url: '/favicon-16x16.png?v=20251007', sizes: '16x16', type: 'image/png' },
     ],
-    // Apple touch
     apple: [{ url: '/apple-touch-icon.png?v=20251007', sizes: '180x180', type: 'image/png' }],
-    // Shortcut: usa l'ICO rinominato (non /favicon.ico) + versione
     shortcut: ['/favicon-legacy.ico?v=20251007'],
   },
   manifest: '/manifest.webmanifest',
@@ -60,13 +56,10 @@ export default function RootLayout({ children }) {
         {/* Navbar fissa */}
         <Navbar />
 
-        {/* Spazio per non coprire l’hero: regola se cambi l’altezza della navbar */}
-        <div className="pt-24 md:pt-28 lg:pt-32">{children}</div>
+        {/* NESSUN padding-top: il contenuto parte a filo sotto la navbar */}
+        {children}
 
-        {/* Footer sempre in fondo */}
         <Footer />
-
-        {/* Banner cookie */}
         <CookieBanner />
       </body>
     </html>

@@ -36,7 +36,7 @@ function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
 export default function Home() {
   return (
     <>
-      {/* HERO animato */}
+      {/* HERO: desktop invariato (h-screen). SOLO su mobile compattiamo spazi interni */}
       <main className="relative h-screen w-full overflow-hidden bg-neutral-900">
         {/* Video di sfondo */}
         <motion.video
@@ -52,10 +52,10 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay */}
+        {/* Overlay leggermente meno “grigio” per evitare banda percepita su mobile */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-black/10 md:bg-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent md:from-black/70 md:via-black/30" />
         </div>
 
         {/* Contenuto HERO */}
@@ -66,10 +66,11 @@ export default function Home() {
           variants={stagger}
         >
           <div className="mx-auto max-w-6xl h-full flex items-end">
-            <div className="px-6 pb-20">
+            {/* Su mobile riduciamo solo il padding-bottom. Desktop identico (pb-20) */}
+            <div className="px-6 pb-12 md:pb-20">
               <motion.p
                 variants={fadeUp}
-                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
+                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-2 md:mb-3"
               >
                 FALL / WINTER 2025 • VENEZIA
               </motion.p>
@@ -83,19 +84,19 @@ export default function Home() {
 
               <motion.p
                 variants={fadeUp}
-                className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
+                className="mt-2 md:mt-3 text-white/90 text-base md:text-lg max-w-xl"
               >
                 Streetwear nato a Venezia. Ribelle, autentico, libero.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-8">
+              <motion.div variants={fadeUp} className="mt-6 md:mt-8">
                 <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
               </motion.div>
             </div>
           </div>
         </motion.div>
 
-        {/* Indizio scroll */}
+        {/* Indizio scroll (invariato) */}
         <motion.div
           className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
           initial={{ opacity: 0, y: 10 }}
@@ -106,8 +107,8 @@ export default function Home() {
         </motion.div>
       </main>
 
-      {/* SEZIONE SHOP */}
-      <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
+      {/* SEZIONE SHOP: riduciamo solo il padding-top su mobile; desktop invariato */}
+      <section id="shop" className="bg-neutral-900 text-white pt-10 md:pt-16 pb-16 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial="hidden"
