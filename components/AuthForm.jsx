@@ -55,9 +55,7 @@ export default function AuthForm({ mode = 'login' }) {
       return;
     }
 
-    // 2) Nessun errore ma SUPABASE segnala duplicato in modo implicito:
-    //    - data.user === null  (utente esiste già)
-    //    - oppure data.user.identities === []
+    // 2) Duplicato implicito
     const identities = data?.user?.identities;
     const implicitDuplicate =
       !data?.user || (Array.isArray(identities) && identities.length === 0);
@@ -118,7 +116,6 @@ export default function AuthForm({ mode = 'login' }) {
     if (error) {
       setMsg({ type: 'error', text: error.message });
     } else {
-      // ricarica la home come richiesto
       window.location.href = '/';
     }
   };
@@ -159,6 +156,16 @@ export default function AuthForm({ mode = 'login' }) {
           {loading ? 'Attendere…' : isLogin ? 'Entra' : 'Crea account'}
         </button>
       </form>
+
+      {/* LINK RESET PASSWORD SOLO IN LOGIN */}
+      {isLogin && (
+        <p className="mt-3 text-sm text-white/80">
+          Hai dimenticato la password?{' '}
+          <a href="/reset-password" className="underline">
+            Reimpostala
+          </a>
+        </p>
+      )}
 
       {!isLogin && canResend && (
         <div className="mt-3">
