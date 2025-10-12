@@ -1,151 +1,243 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
-function CartBadge({ count }) {
-  if (!count) return null;
-  return (
-    <span className="ml-1 inline-flex min-w-5 items-center justify-center rounded-full bg-white text-[10px] font-bold text-black px-1">
-      {count}
-    </span>
-  );
-}
-
-const IconMenu = (props) => (
-  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" {...props}>
-    <path fill="currentColor" d="M3 6h18v2H3zM3 11h18v2H3zM3 16h18v2H3z" />
-  </svg>
-);
-const IconSearch = (props) => (
-  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
-    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.49 21.49 20 15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-  </svg>
-);
-const IconUser = (props) => (
-  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
-    <path fill="currentColor" d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V22h19.2v-2.8c0-3.2-6.4-4.8-9.6-4.8z"/>
-  </svg>
-);
-const IconCart = (props) => (
-  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" {...props}>
-    <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14h9.66c.75 0 1.4-.41 1.73-1.03l3.27-6.14A1 1 0 0021 5H6.21l-.94-2H2v2h2l3.6 7.59L6.25 15A2 2 0 008 18h12v-2H8l1.1-2z"/>
-  </svg>
-);
-
 export default function Navbar() {
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const router = useRouter();
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
-  const readCartCount = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const raw = localStorage.getItem('lr_cart');
-      const arr = raw ? JSON.parse(raw) : [];
-      setCartCount(Array.isArray(arr) ? arr.reduce((n, it) => n + (Number(it.qty) || 0), 0) : 0);
-    } catch {
-      setCartCount(0);
-    }
-  }, []);
+  // ---- AUTH ----
+  const [user, setUser] = useState(null);
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
-    const init = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!mounted) return;
-      setUser(data?.session?.user ?? null);
-      setLoading(false);
+    let active = true;
+    const load = async () => {
+      try {
+        const { data } = await supabase.auth.getSession();
+        if (!active) return;
+        setUser(data?.session?.user ?? null);
+      } catch {
+        if (!active) return;
+        setUser(null);
+      } finally {
+        if (!active) return;
+        setChecking(false);
+      }
     };
-    init();
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((_evt, session) => {
+      if (!active) return;
       setUser(session?.user ?? null);
     });
-
-    readCartCount();
-    const onStorage = (e) => { if (e.key === 'lr_cart') readCartCount(); };
-    const onCustom = () => readCartCount();
-    window.addEventListener('storage', onStorage);
-    window.addEventListener('lr_cart_updated', onCustom);
-
+    load();
     return () => {
-      mounted = false;
-      sub?.subscription?.unsubscribe?.();
-      window.removeEventListener('storage', onStorage);
-      window.removeEventListener('lr_cart_updated', onCustom);
+      active = false;
+      try { sub?.subscription?.unsubscribe?.(); } catch {}
     };
-  }, [readCartCount]);
+  }, []);
 
   const onLogout = async () => {
-    setLoading(true);
-    await supabase.auth.signOut();
-    setLoading(false);
+    try { await supabase.auth.signOut(); } catch {}
     setMobileOpen(false);
-    window.location.href = '/login';
+    router.replace('/');
   };
 
-  return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-neutral-800/80 backdrop-blur-sm">
-      <nav className="relative mx-auto flex h-24 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <div className="relative z-20 flex items-center gap-3">
-          <button
-            aria-label="Apri menu"
-            aria-expanded={mobileOpen ? 'true' : 'false'}
-            className="md:hidden rounded-lg p-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-            onClick={() => setMobileOpen((v) => !v)}
-          >
-            <IconMenu />
-          </button>
-        </div>
+  // ---- CART BADGE ----
+  const CART_KEY = 'lr_cart';
+  const CART_EVENT = 'lr_cart_updated';
+  const [cartCount, setCartCount] = useState(0);
 
+  const readCartCount = () => {
+    if (typeof window === 'undefined') return 0;
+    try {
+      const raw = localStorage.getItem(CART_KEY);
+      const items = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(items)) return 0;
+      return items.reduce((sum, it) => sum + (Number(it.qty) || 0), 0);
+    } catch {
+      return 0;
+    }
+  };
+
+  useEffect(() => {
+    const update = () => setCartCount(readCartCount());
+    update();
+    const onStorage = (e) => { if (!e?.key || e.key === CART_KEY) update(); };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener(CART_EVENT, update);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener(CART_EVENT, update);
+    };
+  }, []);
+
+  // ---- MOBILE MENU ----
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const menuRef = useRef(null);
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  useEffect(() => {
+    const onClickOutside = (e) => {
+      if (!menuRef.current) return;
+      if (!menuRef.current.contains(e.target)) setMobileOpen(false);
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, []);
+
+  // ---- SHRINK ON SCROLL ----
+  const [shrink, setShrink] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      setShrink(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const userInitial =
+    (user?.user_metadata?.full_name?.[0] || user?.email?.[0] || 'U').toUpperCase();
+
+  const logoScale = shrink ? 'scale-90' : 'scale-100';
+  const navHeight = shrink ? 'h-14 md:h-16' : 'h-16 md:h-20';
+  const bgOpacity = shrink ? 'bg-black/95' : 'bg-black/80';
+
+  return (
+    <header
+      role="banner"
+      aria-label="Barra di navigazione"
+      className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 backdrop-blur-md transition-all duration-300 ${bgOpacity}`}
+    >
+      <div className={`relative mx-auto ${navHeight} max-w-7xl px-4 sm:px-6 lg:px-8 transition-all duration-300`}>
+        {/* LOGO centrato */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <Link
             href="/"
-            aria-label="Lagoon Rebel Wear"
-            className="pointer-events-auto"
+            className={`pointer-events-auto inline-flex items-center transition-transform duration-500 ease-out ${logoScale}`}
+            aria-label="Vai alla home"
           >
-            <Image
+            <img
               src="/Logo.png"
-              alt="Lagoon Rebel Wear"
-              width={420}
-              height={120}
-              priority
-              sizes="(max-width:480px) 240px, (max-width:768px) 320px, 420px"
-              className="h-20 sm:h-[5.5rem] md:h-[6rem] w-auto
-                         invert brightness-0 contrast-200
-                         drop-shadow-[0_0_18px_rgba(255,255,255,0.4)]"
+              alt="Lagoon Rebel — logo"
+              className="block w-auto h-[48px] md:h-[60px] lg:h-[72px] brightness-0 invert drop-shadow"
+              decoding="async"
+              style={{ maxHeight: '72px' }}
             />
           </Link>
         </div>
 
-        <div className="relative z-20 flex items-center gap-2 sm:gap-3">
+        {/* DESKTOP */}
+        <nav
+          role="navigation"
+          aria-label="Azioni desktop"
+          className="absolute inset-y-0 right-0 hidden md:flex items-center gap-3 text-white"
+        >
           <Link
             href="/search"
-            className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+            className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition"
           >
-            <IconSearch />
             <span>Cerca</span>
           </Link>
 
-          {loading ? (
-            <span className="text-sm text-white/60">…</span>
-          ) : user ? (
-            <>
+          {user ? (
+            <div className="flex items-center gap-2">
               <Link
                 href="/account"
-                className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white ring-1 ring-white/10 hover:bg-white/5"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/5 text-sm font-semibold text-white hover:bg-white/10 transition"
+                aria-label="Account"
+                title="Account"
               >
-                <IconUser />
-                <span>Account</span>
+                {userInitial}
               </Link>
               <button
                 onClick={onLogout}
-                className="hidden md:block rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition"
+              >
+                <span>Esci</span>
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/login"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition"
+            >
+              <span>Accedi</span>
+            </Link>
+          )}
+
+          <Link
+            href="/cart"
+            className="relative inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition"
+          >
+            <span>Carrello</span>
+            <span className="ml-1 inline-flex min-w-[20px] items-center justify-center rounded-full border border-white/50 px-1.5 text-[11px] font-semibold text-white leading-none">
+              {cartCount}
+            </span>
+          </Link>
+        </nav>
+
+        {/* MOBILE */}
+        <div className="absolute inset-y-0 left-0 flex md:hidden items-center">
+          <button
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-label="Apri menu"
+            className="inline-flex items-center justify-center rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10 transition"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="absolute inset-y-0 right-0 flex md:hidden items-center">
+          <Link
+            href="/cart"
+            aria-label="Vai al carrello"
+            className="inline-flex items-center justify-center p-2 text-white hover:opacity-90 transition"
+            title="Carrello"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" className="text-white">
+              <path fill="currentColor" d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.16 14.26l.03.01L19 14l1.1-7H6.21l-.2-1H3V4h2.4l2.72 9.39-1.96.87Z"/>
+            </svg>
+            <sup className="ml-0.5 -mt-3 inline-block align-super text-[10px] leading-none text-white">
+              {cartCount}
+            </sup>
+          </Link>
+        </div>
+      </div>
+
+      {/* MENU MOBILE */}
+      <div
+        ref={menuRef}
+        className={[
+          "md:hidden overflow-hidden border-t border-white/10 bg-black/90 backdrop-blur",
+          mobileOpen ? "max-h-[320px] opacity-100" : "max-h-0 opacity-0",
+          "transition-all duration-300 ease-out"
+        ].join(' ')}
+      >
+        <div className="px-6 py-4 space-y-3 text-white">
+          <Link
+            href="/search"
+            className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+          >
+            Cerca
+          </Link>
+
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+              >
+                Account
+              </Link>
+              <button
+                onClick={onLogout}
+                className="w-full text-left rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
               >
                 Esci
               </button>
@@ -153,92 +245,23 @@ export default function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="hidden md:flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5"
+              className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
             >
-              <IconUser />
-              <span>Accedi</span>
+              Accedi
             </Link>
           )}
 
           <Link
             href="/cart"
-            className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-white/90 ring-1 ring-white/10 hover:bg-white/5"
+            className="flex items-center justify-between rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
           >
-            <IconCart />
-            <span className="hidden sm:inline">Carrello</span>
-            <CartBadge count={cartCount} />
+            <span>Carrello</span>
+            <span className="inline-flex min-w-[20px] items-center justify-center rounded-full border border-white/50 px-1.5 text-[11px] font-semibold text-white leading-none">
+              {cartCount}
+            </span>
           </Link>
         </div>
-      </nav>
-
-      {mobileOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
-            onClick={() => setMobileOpen(false)}
-          />
-          <div className="fixed left-0 right-0 top-24 z-50 border-t border-white/10 bg-neutral-900/95 md:hidden">
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4">
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/search"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-                >
-                  <IconSearch />
-                  <span>Cerca</span>
-                </Link>
-
-                <Link
-                  href="/contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-                >
-                  Contatti
-                </Link>
-
-                {user ? (
-                  <>
-                    <Link
-                      href="/account"
-                      onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
-                    >
-                      <IconUser />
-                      <span>Account</span>
-                    </Link>
-                    <button
-                      onClick={() => { setMobileOpen(false); onLogout(); }}
-                      className="rounded-md px-3 py-2 text-left text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-                    >
-                      Esci
-                    </button>
-                  </>
-                ) : (
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-white ring-1 ring-white/10 hover:bg-white/5"
-                  >
-                    <IconUser />
-                    <span>Accedi</span>
-                  </Link>
-                )}
-
-                <Link
-                  href="/cart"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 rounded-md px-3 py-2 text-white/90 ring-1 ring-white/10 hover:bg-white/5"
-                >
-                  <IconCart />
-                  <span>Carrello</span>
-                  <CartBadge count={cartCount} />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+      </div>
     </header>
   );
 }

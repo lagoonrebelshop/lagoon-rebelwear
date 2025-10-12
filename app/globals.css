@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
+/* =========================
+   Theme tokens (dark-first)
+   ========================= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0a;  /* solo variabili, il body NON viene colorato qui */
+  --foreground: #ededed;
+
+  /* Accenti neutri utili in CSS custom */
+  --muted: rgba(255,255,255,0.08);
+  --muted-2: rgba(255,255,255,0.14);
+  --ring: rgba(255,255,255,0.4);
 }
 
 @theme inline {
@@ -12,6 +20,7 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Rispetta preferenze OS (solo variabili, niente override del body) */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -19,8 +28,193 @@
   }
 }
 
+/* =========================
+   Base (non tocchiamo bg/color)
+   ========================= */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    "Apple Color Emoji","Segoe UI Emoji");
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* NIENTE background/color qui: li gestisce il layout con Tailwind */
+}
+
+/* Migliora titoli di default (non invasivo) */
+h1,h2,h3 { letter-spacing: -0.01em; }
+h1 { font-weight: 800; }
+h2,h3 { font-weight: 700; }
+
+/* Link leggibili anche senza underline sempre */
+a { text-underline-offset: 0.15em; }
+
+/* Selezione testo coerente con tema scuro */
+::selection {
+  background: rgba(255,255,255,0.85);
+  color: #0a0a0a;
+}
+
+/* Focus ring accessibile, elegante su elementi interattivi */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Scrollbar dark (webkit) */
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--muted-2); }
+
+/* Media interattivi consistenti */
+img, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+}
+img, video { height: auto; }
+
+/* Evita trascinamenti fastidiosi su mobile per loghi/icone */
+img, a img { -webkit-user-drag: none; user-select: none; }
+
+/* Mini utilità comode (senza @apply per restare neutri) */
+.no-tap-highlight { -webkit-tap-highlight-color: transparent; }
+.text-balance { text-wrap: balance; }
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; clip-path: inset(50%);
+}
+
+/* =========================
+   Utilities di stile riutilizzabili
+   ========================= */
+
+/* Titoletti sezione in caps con tracking (usati in /cart) */
+.section-title {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Separatore sottile (coerente con tema) */
+.divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255,255,255,0.1);
+}
+
+/* Bottoni base (coerenti con stile sito) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .6rem 1rem;
+  font-size: .875rem;
+  font-weight: 600;
+  border-radius: .5rem;
+  border: 1px solid rgba(255,255,255,0.16);
+  color: #fff;
+  background: rgba(255,255,255,0.06);
+  transition: background .2s ease, border-color .2s ease, transform .06s ease;
+}
+.btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.28); }
+.btn:active { transform: translateY(1px); }
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.28);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+/* =========================
+   Payment Icons (Lagoon Rebel)
+   ========================= */
+
+.payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.payment-icons img {
+  height: 26px;
+  width: auto;
+  border-radius: 6px;
+  background-color: transparent;
+  object-fit: contain;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+/* Effetto hover leggero */
+.payment-icons img:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 6px rgba(255,255,255,0.18);
+}
+
+/* Apple/Google Pay su badge bianco come nei siti fashion */
+.payment-icons img[src*="apple-pay"],
+.payment-icons img[src*="google-pay"] {
+  background: #fff;
+  padding: 2px 6px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.08) inset;
+}
+
+/* Migliora contrasto leggero per loghi vettoriali su tema scuro */
+@media (prefers-color-scheme: dark) {
+  .payment-icons img[src*="visa"],
+  .payment-icons img[src*="mastercard"],
+  .payment-icons img[src*="paypal"] {
+    filter: brightness(1.05);
+  }
+}
+
+/* Tooltip minimal opzionale sulle payment icons
+   Usa: <img ... data-tip="PayPal disponibile"> */
+.payment-icons [data-tip] {
+  position: relative;
+}
+.payment-icons [data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%; bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 11px;
+  line-height: 1;
+  color: #0a0a0a;
+  background: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  opacity: 0; pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+  transform-origin: bottom center;
+}
+.payment-icons [data-tip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
 }

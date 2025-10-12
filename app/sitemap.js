@@ -1,9 +1,28 @@
-export default function sitemap() {
-  const now = new Date();
-  return [
-    { url: 'https://www.lagoonrebelwear.com/',      lastModified: now, changeFrequency: 'monthly', priority: 1 },
-    { url: 'https://www.lagoonrebelwear.com/search', lastModified: now, changeFrequency: 'monthly', priority: 0.6 },
-    { url: 'https://www.lagoonrebelwear.com/cart',   lastModified: now, changeFrequency: 'weekly',  priority: 0.5 },
-    { url: 'https://www.lagoonrebelwear.com/account',lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
+export default async function sitemap() {
+  const base = 'https://www.lagoonrebelwear.com';
+
+  // Rotte statiche principali (aggiungi/modifica qui quando crei nuove pagine)
+  const staticRoutes = [
+    '/',
+    '/search',
+    '/contact',
+    '/privacy',
+    '/cookies',
+    '/terms',
+    '/login',
+    '/signup',
+    '/reset-password',
+    '/update-password',
+    '/account',
+    '/cart',
   ];
+
+  const now = new Date().toISOString();
+
+  return staticRoutes.map((path) => ({
+    url: `${base}${path}`,
+    lastModified: now,
+    changeFrequency: path === '/' ? 'daily' : 'weekly',
+    priority: path === '/' ? 1.0 : 0.7,
+  }));
 }
