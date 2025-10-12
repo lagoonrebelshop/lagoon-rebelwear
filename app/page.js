@@ -5,25 +5,21 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import AddToCartButton from '@/components/AddToCartButton';
 
-// Variants riutilizzabili
+// Animations
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
 };
-
-const stagger = {
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
+const stagger = { visible: { transition: { staggerChildren: 0.12 } } };
 const cardIn = {
   hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-// CTA stile editoriale (linea–testo–linea)
+// CTA editoriale
 function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
   return (
-    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden pointer-events-auto">
+    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
       <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
       <span className="mt-3 mb-3 tracking-[0.25em] text-sm font-semibold text-white/95 group-hover:text-white relative">
         <span className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out bg-white/10" />
@@ -38,8 +34,16 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      {/* offset microscopico per eliminare il “filo grigio” sotto la navbar, senza tagliare il video */}
-      <main className="relative -mt-[4px] sm:-mt-px md:mt-0 h-[100svh] w-full overflow-hidden bg-neutral-900">
+      {/* micro offset top per non tagliare il video sotto la navbar */}
+      <main
+        className="relative -mt-[2px] md:-mt-px w-full overflow-hidden bg-neutral-900"
+        // forziamo 100dvh per iOS Safari; fallback a 100svh se 100dvh non esiste
+        style={{
+          height:
+            '100dvh',
+          // fallback runtime: alcuni browser vecchi ignorano dvh; il CSS sotto resta comunque valido
+        }}
+      >
         {/* Video di sfondo */}
         <motion.video
           autoPlay
@@ -55,50 +59,53 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay */}
+        {/* Overlay scuri per leggibilità */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-black/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* Contenuto HERO, ancorato in basso (non può “salire” sopra il video) */}
+        {/* BLOCCO TESTO — sempre sopra al video e agganciato al fondo */}
         <motion.div
-          className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
+          className="absolute inset-x-0 bottom-0 z-10"
           initial="hidden"
           animate="visible"
           variants={stagger}
+          // safe area bottom su iOS + padding responsivo
+          style={{
+            paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 1.25rem)', // ≥20px
+          }}
         >
-          <div className="mx-auto max-w-6xl px-6 pb-[max(env(safe-area-inset-bottom),theme(spacing.16))] md:pb-24 lg:pb-28">
-            <motion.p
-              variants={fadeUp}
-              className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
-            >
-              FALL / WINTER 2025 • VENEZIA
-            </motion.p>
+          <div className="mx-auto max-w-6xl">
+            <div className="px-6 pb-6 md:pb-10">
+              <motion.p
+                variants={fadeUp}
+                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
+              >
+                FALL / WINTER 2025 • VENEZIA
+              </motion.p>
 
-            <motion.h1
-              variants={fadeUp}
-              className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
-            >
-              Lagoon Rebel Wear
-            </motion.h1>
+              <motion.h1
+                variants={fadeUp}
+                className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
+              >
+                Lagoon Rebel Wear
+              </motion.h1>
 
-            <motion.p
-              variants={fadeUp}
-              className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
-            >
-              Streetwear nato a Venezia. Ribelle, autentico, libero.
-            </motion.p>
+              <motion.p variants={fadeUp} className="mt-3 text-white/90 text-base md:text-lg max-w-xl">
+                Streetwear nato a Venezia. Ribelle, autentico, libero.
+              </motion.p>
 
-            <motion.div variants={fadeUp} className="mt-8">
-              <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
-            </motion.div>
+              <motion.div variants={fadeUp} className="mt-8">
+                <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
         {/* Indicatore scroll */}
         <motion.div
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
+          className="absolute bottom-2 left-1/2 -translate-x-1/2 z-10 md:bottom-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0, transition: { delay: 0.8 } }}
         >
