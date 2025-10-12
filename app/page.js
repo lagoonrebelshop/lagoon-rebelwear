@@ -1,3 +1,4 @@
+// app/page.js
 'use client';
 
 import { motion } from 'framer-motion';
@@ -36,16 +37,16 @@ function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
 export default function Home() {
   return (
     <>
-      {/* HERO: desktop invariato (h-screen). SOLO su mobile compattiamo spazi interni */}
-      <main className="relative h-screen w-full overflow-hidden bg-neutral-900">
+      {/* HERO */}
+      {/* Offset micro solo mobile: niente fascia grigia senza tagliare il video */}
+      <main className="relative -mt-[2px] sm:-mt-px md:mt-0 h-[100svh] w-full overflow-hidden bg-neutral-900">
         {/* Video di sfondo */}
         <motion.video
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
-          poster="/hero-poster.jpg"  // <— opzionale: metti un frame in /public/hero-poster.jpg
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover will-change-transform"
           initial={{ scale: 1.04 }}
           animate={{ scale: 1 }}
@@ -54,10 +55,10 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay leggermente meno “grigio” su mobile per eliminare la banda percepita */}
+        {/* Overlay */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 bg-black/10 md:bg-black/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent md:from-black/70 md:via-black/30" />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
         {/* Contenuto HERO */}
@@ -68,11 +69,10 @@ export default function Home() {
           variants={stagger}
         >
           <div className="mx-auto max-w-6xl h-full flex items-end">
-            {/* Su mobile riduciamo solo il padding-bottom. Desktop identico (pb-20) */}
-            <div className="px-6 pb-10 md:pb-20">
+            <div className="px-6 pb-8 md:pb-20">
               <motion.p
                 variants={fadeUp}
-                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-2 md:mb-3"
+                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
               >
                 FALL / WINTER 2025 • VENEZIA
               </motion.p>
@@ -86,19 +86,19 @@ export default function Home() {
 
               <motion.p
                 variants={fadeUp}
-                className="mt-2 md:mt-3 text-white/90 text-base md:text-lg max-w-xl"
+                className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
               >
                 Streetwear nato a Venezia. Ribelle, autentico, libero.
               </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-6 md:mt-8">
+              <motion.div variants={fadeUp} className="mt-8">
                 <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
               </motion.div>
             </div>
           </div>
         </motion.div>
 
-        {/* Indizio scroll (invariato) */}
+        {/* Indicatore scroll */}
         <motion.div
           className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10"
           initial={{ opacity: 0, y: 10 }}
@@ -109,8 +109,8 @@ export default function Home() {
         </motion.div>
       </main>
 
-      {/* SEZIONE SHOP: riduciamo solo il padding-top su mobile; desktop invariato */}
-      <section id="shop" className="bg-neutral-900 text-white pt-10 md:pt-16 pb-16 px-6">
+      {/* SEZIONE SHOP */}
+      <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial="hidden"
@@ -126,7 +126,6 @@ export default function Home() {
             </motion.p>
           </motion.div>
 
-          {/* Grid */}
           <motion.div
             className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
             initial="hidden"
@@ -141,22 +140,17 @@ export default function Home() {
               className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
-                {/* front */}
                 <Image
                   src="/zoomania-hyppopothesis-front.png"
                   alt="Hyppopothesis Tee - Front"
                   fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
-                  priority={false}
                 />
-                {/* back */}
                 <Image
                   src="/zoomania-hyppopothesis-back.png"
                   alt="Hyppopothesis Tee - Back"
                   fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
                 <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
                   Zoomania
@@ -190,21 +184,17 @@ export default function Home() {
               className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
             >
               <div className="relative aspect-[4/5] w-full">
-                {/* front */}
                 <Image
                   src="/zoomania-hyppopothesis-hoodie-front.png"
                   alt="Hyppopothesis Hoodie - Front"
                   fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-100 group-hover:opacity-0"
-                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
-                {/* back */}
                 <Image
                   src="/zoomania-hyppopothesis-hoodie-back.png"
                   alt="Hyppopothesis Hoodie - Back"
                   fill
                   className="absolute inset-0 h-full w-full object-contain transition-opacity duration-300 opacity-0 group-hover:opacity-100"
-                  sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
                 />
                 <span className="absolute left-3 top-3 text-[11px] font-semibold tracking-wide bg-white text-black px-2 py-1 rounded-full">
                   Zoomania
