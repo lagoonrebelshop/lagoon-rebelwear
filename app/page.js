@@ -44,6 +44,8 @@ export default function Home() {
           loop
           muted
           playsInline
+          preload="auto"
+          poster="/hero-poster.jpg"  // <— opzionale: metti un frame in /public/hero-poster.jpg
           className="absolute inset-0 w-full h-full object-cover will-change-transform"
           initial={{ scale: 1.04 }}
           animate={{ scale: 1 }}
@@ -52,7 +54,7 @@ export default function Home() {
           <source src="/Gondole01.mp4" type="video/mp4" />
         </motion.video>
 
-        {/* Overlay leggermente meno “grigio” per evitare banda percepita su mobile */}
+        {/* Overlay leggermente meno “grigio” su mobile per eliminare la banda percepita */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-black/10 md:bg-black/20" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent md:from-black/70 md:via-black/30" />
@@ -67,7 +69,7 @@ export default function Home() {
         >
           <div className="mx-auto max-w-6xl h-full flex items-end">
             {/* Su mobile riduciamo solo il padding-bottom. Desktop identico (pb-20) */}
-            <div className="px-6 pb-12 md:pb-20">
+            <div className="px-6 pb-10 md:pb-20">
               <motion.p
                 variants={fadeUp}
                 className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-2 md:mb-3"
