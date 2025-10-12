@@ -23,7 +23,7 @@ const cardIn = {
 // CTA stile editoriale (linea–testo–linea)
 function CtaScopri({ href = '#shop', label = 'SCOPRI ZOOMANIA' }) {
   return (
-    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
+    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden pointer-events-auto">
       <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
       <span className="mt-3 mb-3 tracking-[0.25em] text-sm font-semibold text-white/95 group-hover:text-white relative">
         <span className="absolute inset-0 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out bg-white/10" />
@@ -38,8 +38,8 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      {/* Offset micro solo mobile: niente fascia grigia senza tagliare il video */}
-      <main className="relative -mt-[2px] sm:-mt-px md:mt-0 h-[100svh] w-full overflow-hidden bg-neutral-900">
+      {/* offset microscopico per eliminare il “filo grigio” sotto la navbar, senza tagliare il video */}
+      <main className="relative -mt-[4px] sm:-mt-px md:mt-0 h-[100svh] w-full overflow-hidden bg-neutral-900">
         {/* Video di sfondo */}
         <motion.video
           autoPlay
@@ -61,40 +61,38 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* Contenuto HERO */}
+        {/* Contenuto HERO, ancorato in basso (non può “salire” sopra il video) */}
         <motion.div
-          className="relative z-10 h-full"
+          className="absolute inset-x-0 bottom-0 z-10 pointer-events-none"
           initial="hidden"
           animate="visible"
           variants={stagger}
         >
-          <div className="mx-auto max-w-6xl h-full flex items-end">
-            <div className="px-6 pb-8 md:pb-20">
-              <motion.p
-                variants={fadeUp}
-                className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
-              >
-                FALL / WINTER 2025 • VENEZIA
-              </motion.p>
+          <div className="mx-auto max-w-6xl px-6 pb-[max(env(safe-area-inset-bottom),theme(spacing.16))] md:pb-24 lg:pb-28">
+            <motion.p
+              variants={fadeUp}
+              className="text-white/70 text-[11px] md:text-xs tracking-[0.25em] mb-3"
+            >
+              FALL / WINTER 2025 • VENEZIA
+            </motion.p>
 
-              <motion.h1
-                variants={fadeUp}
-                className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
-              >
-                Lagoon Rebel Wear
-              </motion.h1>
+            <motion.h1
+              variants={fadeUp}
+              className="text-white text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight max-w-3xl"
+            >
+              Lagoon Rebel Wear
+            </motion.h1>
 
-              <motion.p
-                variants={fadeUp}
-                className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
-              >
-                Streetwear nato a Venezia. Ribelle, autentico, libero.
-              </motion.p>
+            <motion.p
+              variants={fadeUp}
+              className="mt-3 text-white/90 text-base md:text-lg max-w-xl"
+            >
+              Streetwear nato a Venezia. Ribelle, autentico, libero.
+            </motion.p>
 
-              <motion.div variants={fadeUp} className="mt-8">
-                <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
-              </motion.div>
-            </div>
+            <motion.div variants={fadeUp} className="mt-8">
+              <CtaScopri href="#shop" label="SCOPRI ZOOMANIA" />
+            </motion.div>
           </div>
         </motion.div>
 
