@@ -1,11 +1,10 @@
-// components/Footer.jsx
 'use client';
 
 import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black text-white pt-12 pb-8 border-top border-white/10">
+    <footer className="bg-black text-white pt-12 pb-8 border-t border-white/10">
       <div className="mx-auto max-w-6xl px-6">
         {/* Row: Newsletter + Link columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
@@ -15,7 +14,10 @@ export default function Footer() {
             <p className="text-white/70 mt-2 text-sm">
               Offerte, drop e storie da Venezia. Niente spam.
             </p>
-            <form onSubmit={(e) => e.preventDefault()} className="mt-4 flex flex-col sm:flex-row gap-3">
+            <form
+              onSubmit={(e) => e.preventDefault()}
+              className="mt-4 flex flex-col sm:flex-row gap-3"
+            >
               <input
                 type="email"
                 required
@@ -31,28 +33,24 @@ export default function Footer() {
             </form>
           </div>
 
-          {/* Informazioni */}
+          {/* Colonna 1 — Shop (link esistenti) */}
           <div>
-            <h3 className="text-lg font-semibold">Informazioni</h3>
+            <h3 className="text-lg font-semibold">Shop</h3>
             <ul className="mt-3 space-y-2 text-white/80 text-sm">
-              <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
-              <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
-              <li><Link href="/terms" className="hover:text-white">Termini e condizioni</Link></li>
-              <li><Link href="/support" className="hover:text-white">Supporto</Link></li>
-              <li><Link href="/shipping" className="hover:text-white">Spedizioni</Link></li>
-              <li><Link href="/payments" className="hover:text-white">Pagamenti</Link></li>
-              <li><Link href="/returns" className="hover:text-white">Resi e rimborsi</Link></li>
+              <li><Link href="/search" className="hover:text-white">Cerca</Link></li>
+              <li><Link href="/cart" className="hover:text-white">Carrello</Link></li>
+              <li><Link href="/account" className="hover:text-white">Account</Link></li>
             </ul>
           </div>
 
-          {/* Contatti / Resta aggiornato (senza icone pagamenti) */}
+          {/* Colonna 2 — Legale (link esistenti) */}
           <div>
-            <h3 className="text-lg font-semibold">Resta aggiornato</h3>
+            <h3 className="text-lg font-semibold">Legale</h3>
             <ul className="mt-3 space-y-2 text-white/80 text-sm">
-              <li><Link href="/contact" className="hover:text-white">Contatti</Link></li>
-              <li><Link href="/account" className="hover:text-white">Account</Link></li>
-              <li><Link href="/search" className="hover:text-white">Cerca</Link></li>
+              <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
               <li><Link href="/cookies" className="hover:text-white">Cookie</Link></li>
+              <li><Link href="/terms" className="hover:text-white">Termini</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Contatti</Link></li>
             </ul>
           </div>
         </div>
@@ -63,8 +61,10 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-white/60">
-            © {new Date().getFullYear()} Lagoon Rebel Wear — Venezia
+            © {new Date().getFullYear()} Lagoon Rebel Wear — All rights reserved. · Venezia, Italia
           </p>
+
+          {/* Social (facoltativi) */}
           <div className="flex items-center gap-4 text-sm">
             <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white">Instagram</a>
             <a href="https://www.tiktok.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white">TikTok</a>
