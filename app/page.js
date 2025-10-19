@@ -39,7 +39,7 @@ export default function Home() {
     <>
       {/* HERO */}
       <main data-hero className="relative h-[100svh] w-full overflow-hidden bg-neutral-900">
-        {/* Video di sfondo */}
+        {/* Video di sfondo (niente zoom) */}
         <motion.video
           autoPlay
           loop
@@ -47,7 +47,7 @@ export default function Home() {
           playsInline
           preload="metadata"
           className="absolute inset-0 w-full h-full object-cover will-change-transform"
-          initial={{ scale: 1.04 }}
+          initial={{ scale: 1 }}
           animate={{ scale: 1 }}
           transition={{ duration: 6, ease: [0.22, 1, 0.36, 1] }}
         >
@@ -68,7 +68,6 @@ export default function Home() {
           variants={stagger}
         >
           <div className="mx-auto max-w-6xl h-full flex items-end">
-            {/* Padding corretto mobile/desktop */}
             <div className="px-6 pb-8 sm:pb-10 md:pb-20">
               <motion.p
                 variants={fadeUp}
@@ -113,20 +112,13 @@ export default function Home() {
           :root {
             --nav-h: 0px;
           }
-
-          /* fino a 1024px (mobile e tablet) */
           @media (max-width: 1024px) {
-            :root {
-              --nav-h: 96px;
-            }
+            :root { --nav-h: 96px; }
           }
-
           main[data-hero] {
             padding-top: var(--nav-h);
             min-height: calc(100svh - var(--nav-h));
           }
-
-          /* Riduci e armonizza padding per evitare gap visivo sotto il video */
           @media (max-width: 768px) {
             main[data-hero] .pb-8,
             main[data-hero] .sm\\:pb-10 {

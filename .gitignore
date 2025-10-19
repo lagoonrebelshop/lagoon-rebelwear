@@ -18,3 +18,4 @@ Thumbs.db
 *.bak
 *.tmp
 app/search/page.js.bak
+.env.local

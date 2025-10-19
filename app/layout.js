@@ -3,6 +3,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
+import TrustBarSlim from '@/components/TrustBarSlim'; // ⬅️ AGGIUNTO
 
 export const metadata = {
   metadataBase: new URL('https://www.lagoonrebelwear.com'),
@@ -38,6 +39,7 @@ export const metadata = {
     images: ['/og.jpg'],
     creator: '@lagoonrebelwear',
   },
+  // Icone + cache-busting versione
   icons: {
     icon: [
       { url: '/favicon-32x32.png?v=20251007', sizes: '32x32', type: 'image/png' },
@@ -56,10 +58,16 @@ export default function RootLayout({ children }) {
         {/* Navbar fissa */}
         <Navbar />
 
-        {/* NESSUN padding-top: il contenuto parte a filo sotto la navbar */}
-        {children}
+        {/* Spazio per non coprire l’hero */}
+        <div className="pt-24 md:pt-28 lg:pt-32">{children}</div>
 
+        {/* Trust bar globale (home, carrello, ecc.) */}
+        <TrustBarSlim /> {/* ⬅️ AGGIUNTO */}
+
+        {/* Footer sempre in fondo */}
         <Footer />
+
+        {/* Banner cookie */}
         <CookieBanner />
       </body>
     </html>

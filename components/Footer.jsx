@@ -1,52 +1,75 @@
 // components/Footer.jsx
+'use client';
+
+import Link from 'next/link';
+
 export default function Footer() {
   return (
-    <footer className="bg-black text-white pt-12 pb-16 border-t border-white/10 mt-20">
-      <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <footer className="bg-black text-white pt-12 pb-8 border-top border-white/10">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Row: Newsletter + Link columns */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12">
+          {/* Newsletter */}
+          <div>
+            <h3 className="text-lg font-semibold">Iscriviti</h3>
+            <p className="text-white/70 mt-2 text-sm">
+              Offerte, drop e storie da Venezia. Niente spam.
+            </p>
+            <form onSubmit={(e) => e.preventDefault()} className="mt-4 flex flex-col sm:flex-row gap-3">
+              <input
+                type="email"
+                required
+                placeholder="la-tua@email.com"
+                className="w-full rounded-md bg-white/10 px-4 py-2.5 text-sm placeholder-white/50 outline-none border border-white/10 focus:border-white/30"
+              />
+              <button
+                type="submit"
+                className="whitespace-nowrap rounded-md bg-white text-black px-4 py-2.5 text-sm font-semibold hover:bg-neutral-200"
+              >
+                Iscrivimi
+              </button>
+            </form>
+          </div>
 
-        {/* Newsletter */}
-        <div className="md:col-span-2">
-          <h3 className="font-bold text-lg">Lagoon Rebel — Newsletter</h3>
-          <p className="text-white/70 text-sm mt-2">Drop esclusivi e news dalla Laguna.</p>
-          {/* Sostituisci action con il tuo provider (Mailchimp/Formspree) */}
-          <form className="mt-4 flex gap-2" action="https://formspree.io/f/mzzjavly" method="POST">
-            <input
-              name="email"
-              type="email"
-              required
-              placeholder="La tua email"
-              className="w-full px-4 py-2 rounded-md bg-white text-black"
-            />
-            <button className="px-5 py-2 rounded-md bg-white text-black font-semibold hover:bg-neutral-200">
-              ISCRIVITI
-            </button>
-          </form>
+          {/* Informazioni */}
+          <div>
+            <h3 className="text-lg font-semibold">Informazioni</h3>
+            <ul className="mt-3 space-y-2 text-white/80 text-sm">
+              <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
+              <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
+              <li><Link href="/terms" className="hover:text-white">Termini e condizioni</Link></li>
+              <li><Link href="/support" className="hover:text-white">Supporto</Link></li>
+              <li><Link href="/shipping" className="hover:text-white">Spedizioni</Link></li>
+              <li><Link href="/payments" className="hover:text-white">Pagamenti</Link></li>
+              <li><Link href="/returns" className="hover:text-white">Resi e rimborsi</Link></li>
+            </ul>
+          </div>
+
+          {/* Contatti / Resta aggiornato (senza icone pagamenti) */}
+          <div>
+            <h3 className="text-lg font-semibold">Resta aggiornato</h3>
+            <ul className="mt-3 space-y-2 text-white/80 text-sm">
+              <li><Link href="/contact" className="hover:text-white">Contatti</Link></li>
+              <li><Link href="/account" className="hover:text-white">Account</Link></li>
+              <li><Link href="/search" className="hover:text-white">Cerca</Link></li>
+              <li><Link href="/cookies" className="hover:text-white">Cookie</Link></li>
+            </ul>
+          </div>
         </div>
 
-        {/* Link utili */}
-        <div>
-          <h4 className="font-semibold mb-3">Info</h4>
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li><a href="/contact" className="hover:text-white">Contatti</a></li>
-            <li><a href="/privacy" className="hover:text-white">Privacy</a></li>
-            <li><a href="/cookies" className="hover:text-white">Cookie</a></li>
-            <li><a href="/terms" className="hover:text-white">Termini & Condizioni</a></li>
-          </ul>
-        </div>
+        {/* Divider */}
+        <div className="my-8 h-px bg-white/10" />
 
-        {/* Social */}
-        <div>
-          <h4 className="font-semibold mb-3">Social</h4>
-          <ul className="space-y-2 text-white/80 text-sm">
-            <li><a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover:text-white">Instagram</a></li>
-            <li><a href="https://tiktok.com"   target="_blank" rel="noreferrer" className="hover:text-white">TikTok</a></li>
-            <li><a href="https://youtube.com"  target="_blank" rel="noreferrer" className="hover:text-white">YouTube</a></li>
-          </ul>
+        {/* Bottom bar */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs text-white/60">
+            © {new Date().getFullYear()} Lagoon Rebel Wear — Venezia
+          </p>
+          <div className="flex items-center gap-4 text-sm">
+            <a href="https://www.instagram.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white">Instagram</a>
+            <a href="https://www.tiktok.com" target="_blank" rel="noreferrer" className="text-white/80 hover:text-white">TikTok</a>
+          </div>
         </div>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-6 mt-10 text-xs text-white/60">
-        © {new Date().getFullYear()} Lagoon Rebel Wear — Venezia, Italia
       </div>
     </footer>
   );

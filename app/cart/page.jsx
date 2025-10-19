@@ -1,3 +1,4 @@
+// app/cart/page.jsx
 'use client';
 
 import Link from 'next/link';
@@ -10,7 +11,6 @@ function formatEUR(value) {
 }
 
 const CART_EVENT = 'lr_cart_updated';
-
 const keyOf = (it) => `${it.id}__${it.size ?? ''}__${it.variant ?? ''}`;
 
 /** Mappa immagini prodotto fronte/retro */
@@ -33,44 +33,6 @@ function getImagesFor(it) {
     };
   }
   return { front: '/og.jpg', back: '/og.jpg', aspect: 'aspect-square' };
-}
-
-/** Icona pagamento uniforme 72x36
- * Ordine di tentativi:
- *   1) /payments/<name>.png
- *   2) /payments/<name>.svg.png
- *   3) fallback testuale
- */
-function PaymentIcon({ name, alt }) {
-  const png = `/payments/${name}.png`;
-  const svgpng = `/payments/${name}.svg.png`;
-
-  const onError = (e) => {
-    const tried = e.currentTarget.dataset.fallback || 'none';
-    if (tried === 'none') {
-      e.currentTarget.dataset.fallback = 'svgpng';
-      e.currentTarget.src = svgpng;
-      return;
-    }
-    // fallback finale testuale
-    e.currentTarget.parentElement.innerHTML =
-      `<span class="inline-flex h-[36px] w-[72px] items-center justify-center rounded-[8px] bg-white/10 text-[10px] uppercase tracking-wide text-white/80 ring-1 ring-white/20"> ${alt} </span>`;
-  };
-
-  return (
-    <span className="inline-flex h-[36px] w-[72px] items-center justify-center">
-      <span className="inline-flex h-[36px] w-[72px] items-center justify-center rounded-[8px] bg-white shadow-sm ring-1 ring-white/10 overflow-hidden">
-        <img
-          src={png}
-          alt={alt}
-          className="h-[24px] w-auto object-contain"
-          decoding="async"
-          data-fallback="none"
-          onError={onError}
-        />
-      </span>
-    </span>
-  );
 }
 
 export default function Page() {
@@ -207,7 +169,7 @@ export default function Page() {
                         <h2 className="text-sm font-medium truncate">{it.title}</h2>
                         <button
                           onClick={() => remove(k)}
-                          className="text-xs text-white/60 hover:text-white shrink-0"
+                          className="text-xs text:white/60 hover:text-white shrink-0"
                           title="Rimuovi"
                         >
                           🗑
@@ -230,7 +192,7 @@ export default function Page() {
                           <span className="w-8 text-center text-sm">{it.qty}</span>
                           <button
                             onClick={() => inc(k)}
-                            className="grid h-7 w-7 place-items-center rounded-full bg-white/5 text-white/80 ring-1 ring-white/10 hover:bg-white/10"
+                            className="grid h-7 w-7 place-items-center rounded-full bg:white/5 text-white/80 ring-1 ring-white/10 hover:bg-white/10"
                             aria-label="Aumenta quantità"
                           >
                             +
@@ -297,58 +259,6 @@ export default function Page() {
           </aside>
         </div>
       )}
-
-      {/* FOOTER PAGINA — PAGAMENTI & NEWSLETTER */}
-      <footer className="mt-16 border-t border-white/10 pt-10 text-sm text-white/60">
-        <div className="grid md:grid-cols-4 gap-8">
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.15em] text-white/80">Informazioni</h4>
-            <ul className="mt-3 space-y-1 text-white/70">
-              <li>FAQ</li>
-              <li>Privacy</li>
-              <li>Termini e condizioni</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.15em] text-white/80">Supporto</h4>
-            <ul className="mt-3 space-y-1 text-white/70">
-              <li>Spedizioni</li>
-              <li>Pagamenti</li>
-              <li>Resi e rimborsi</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.15em] text-white/80">Resta aggiornato</h4>
-            <div className="mt-3 flex flex-col gap-2">
-              <input
-                type="email"
-                placeholder="Inserisci la tua email"
-                className="rounded-md bg-white/5 px-3 py-2 text-sm text-white placeholder-white/40 ring-1 ring-white/10 focus:ring-white/20 focus:outline-none"
-              />
-              <button className="rounded-md bg-white text-black text-sm font-semibold py-2 hover:bg-neutral-200 transition">
-                Iscriviti
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-xs uppercase tracking-[0.15em] text-white/80">Metodi di pagamento</h4>
-            <div className="mt-4 flex flex-wrap items-center gap-4">
-              <PaymentIcon name="apple-pay" alt="Apple Pay" />
-              <PaymentIcon name="google-pay" alt="Google Pay" />
-              <PaymentIcon name="paypal" alt="PayPal" />
-              <PaymentIcon name="visa" alt="Visa" />
-              <PaymentIcon name="mastercard" alt="Mastercard" />
-            </div>
-          </div>
-        </div>
-
-        <p className="mt-8 text-xs text-white/40">
-          © {new Date().getFullYear()} Lagoon Rebel Wear — All rights reserved. · Venezia, Italia
-        </p>
-      </footer>
     </main>
   );
 }
