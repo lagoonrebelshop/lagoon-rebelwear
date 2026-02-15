@@ -1,14 +1,52 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-client';
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
+function toItalianAuthError(error) {
+  const raw = (error?.message || '').trim();
+  const lower = raw.toLowerCase();
+
+  // Problemi di rete / CORS / env / browser
+  if (
+    lower.includes('failed to fetch') ||
+    lower.includes('networkerror') ||
+    lower.includes('network error') ||
+    lower.includes('fetch') ||
+    lower.includes('cors')
+  ) {
+    return 'Errore di connessione. Riprova tra poco. Se continua, potrebbe esserci un problema di configurazione (URL/API key) o di rete.';
+  }
+
+  // Login errato
+  if (lower.includes('invalid login credentials')) {
+    return 'Credenziali non valide. Se non hai un account, registrati (ci metti pochissimo).';
+  }
+
+  // Email non confermata
+  if (lower.includes('email not confirmed')) {
+    return 'Email non ancora confermata. Controlla la posta e completa la conferma (anche in Spam).';
+  }
+
+  // Troppi tentativi
+  if (lower.includes('too many requests') || lower.includes('rate limit')) {
+    return 'Troppi tentativi in poco tempo. Aspetta qualche minuto e riprova.';
+  }
+
+  // Password troppo debole / vincoli
+  if (lower.includes('password') && (lower.includes('weak') || lower.includes('short'))) {
+    return 'Password troppo debole: usa almeno 6 caratteri (meglio 10+ con numeri e simboli).';
+  }
+
+  // Fallback: se supabase risponde in inglese, lo mostriamo comunque (meglio di nulla)
+  return raw || 'Operazione non riuscita. Riprova.';
+}
+
 export default function AuthForm({ mode = 'login' }) {
-  // mode: 'login' | 'signup'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [msg, setMsg] = useState(null);
@@ -16,6 +54,7 @@ export default function AuthForm({ mode = 'login' }) {
   const [canResend, setCanResend] = useState(false);
 
   const normalizeEmail = (v) => v.trim().toLowerCase();
+  const isLogin = mode === 'login';
 
   const onSignup = async (e) => {
     e.preventDefault();
@@ -33,13 +72,13 @@ export default function AuthForm({ mode = 'login' }) {
 
     setLoading(false);
 
-    // 1) Errore esplicito
     if (error) {
-      const text = error.message || 'Registrazione non riuscita.';
+      const text = toItalianAuthError(error);
+      const raw = (error?.message || '').toLowerCase();
       const already =
-        /already\s+registered/i.test(text) ||
-        /email address has already been registered/i.test(text) ||
-        /già\s+registrat/i.test(text);
+        raw.includes('already registered') ||
+        raw.includes('has already been registered') ||
+        raw.includes('già registrat');
 
       if (already) {
         setMsg({
@@ -55,7 +94,6 @@ export default function AuthForm({ mode = 'login' }) {
       return;
     }
 
-    // 2) Duplicato implicito
     const identities = data?.user?.identities;
     const implicitDuplicate =
       !data?.user || (Array.isArray(identities) && identities.length === 0);
@@ -70,7 +108,6 @@ export default function AuthForm({ mode = 'login' }) {
       return;
     }
 
-    // 3) Registrazione nuova OK
     setMsg({
       type: 'success',
       text: 'Registrazione inviata! Controlla la tua email e clicca “Conferma”.',
@@ -87,16 +124,17 @@ export default function AuthForm({ mode = 'login' }) {
         email: emailNorm,
         options: { emailRedirectTo: `${SITE_URL}/auth/confirm` },
       });
+
       if (error) {
-        setMsg({ type: 'error', text: error.message });
+        setMsg({ type: 'error', text: toItalianAuthError(error) });
       } else {
         setMsg({
           type: 'success',
-          text: 'Nuova email di conferma inviata. Controlla anche la cartella spam.',
+          text: 'Nuova email di conferma inviata. Controlla anche la cartella Spam.',
         });
       }
     } catch (e) {
-      setMsg({ type: 'error', text: e.message || 'Impossibile rimandare la conferma.' });
+      setMsg({ type: 'error', text: e?.message || 'Impossibile rimandare la conferma.' });
     } finally {
       setLoading(false);
     }
@@ -113,14 +151,23 @@ export default function AuthForm({ mode = 'login' }) {
     });
 
     setLoading(false);
-    if (error) {
-      setMsg({ type: 'error', text: error.message });
-    } else {
-      window.location.href = '/';
-    }
-  };
 
-  const isLogin = mode === 'login';
+    if (error) {
+      const text = toItalianAuthError(error);
+      const lower = (error?.message || '').toLowerCase();
+
+      // “Autocorrezione” intelligente: se non esiste/credenziali errate, suggeriamo registrazione
+      if (lower.includes('invalid login credentials')) {
+        setMsg({ type: 'error', text });
+        return;
+      }
+
+      setMsg({ type: 'error', text });
+      return;
+    }
+
+    window.location.href = '/';
+  };
 
   return (
     <main className="max-w-md mx-auto px-6 py-12">
@@ -157,7 +204,6 @@ export default function AuthForm({ mode = 'login' }) {
         </button>
       </form>
 
-      {/* LINK RESET PASSWORD SOLO IN LOGIN */}
       {isLogin && (
         <p className="mt-3 text-sm text-white/80">
           Hai dimenticato la password?{' '}
@@ -195,9 +241,19 @@ export default function AuthForm({ mode = 'login' }) {
 
       <p className="mt-4 text-sm text-white/60">
         {isLogin ? (
-          <>Non sei ancora registrato? <a href="/signup" className="underline">Registrati ora</a></>
+          <>
+            Non sei ancora registrato?{' '}
+            <a href="/signup" className="underline">
+              Registrati ora
+            </a>
+          </>
         ) : (
-          <>Hai già un account? <a href="/login" className="underline">Accedi</a></>
+          <>
+            Hai già un account?{' '}
+            <a href="/login" className="underline">
+              Accedi
+            </a>
+          </>
         )}
       </p>
     </main>

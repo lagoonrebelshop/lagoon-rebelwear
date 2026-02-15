@@ -1,9 +1,13 @@
-// app/layout.js
-import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import CookieBanner from '@/components/CookieBanner';
-import TrustBarSlim from '@/components/TrustBarSlim'; // ⬅️ AGGIUNTO
+import { Inter } from 'next/font/google'
+import './globals.css'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import CookieBanner from '@/components/CookieBanner'
+import TrustBarSlim from '@/components/TrustBarSlim'
+import { AuthProvider } from '@/contexts/AuthContext'
+import { createClient } from '@/lib/supabase-server'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
   metadataBase: new URL('https://www.lagoonrebelwear.com'),
@@ -39,7 +43,6 @@ export const metadata = {
     images: ['/og.jpg'],
     creator: '@lagoonrebelwear',
   },
-  // Icone + cache-busting versione
   icons: {
     icon: [
       { url: '/favicon-32x32.png?v=20251007', sizes: '32x32', type: 'image/png' },
@@ -49,27 +52,29 @@ export const metadata = {
     shortcut: ['/favicon-legacy.ico?v=20251007'],
   },
   manifest: '/manifest.webmanifest',
-};
+}
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const supabase = createClient()
+  const { data: { session }, error } = await supabase.auth.getSession()
+  
+  if (error) {
+    console.error('Error fetching session in layout:', error)
+  }
+
+  const user = session?.user ?? null
+
   return (
     <html lang="it">
-      <body className="bg-neutral-900 text-white">
-        {/* Navbar fissa */}
-        <Navbar />
-
-        {/* Spazio per non coprire l’hero */}
-        <div className="pt-24 md:pt-28 lg:pt-32">{children}</div>
-
-        {/* Trust bar globale (home, carrello, ecc.) */}
-        <TrustBarSlim /> {/* ⬅️ AGGIUNTO */}
-
-        {/* Footer sempre in fondo */}
-        <Footer />
-
-        {/* Banner cookie */}
-        <CookieBanner />
+      <body className={`${inter.className} bg-neutral-900 text-white`}>
+        <AuthProvider initialSession={session} initialUser={user}>
+          <Navbar />
+          <div className="pt-24 md:pt-28 lg:pt-32">{children}</div>
+          <TrustBarSlim />
+          <Footer />
+          <CookieBanner />
+        </AuthProvider>
       </body>
     </html>
-  );
+  )
 }
