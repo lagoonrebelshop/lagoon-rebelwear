@@ -245,7 +245,7 @@ insert into public.product_styles (
 select
   p.id,
   coalesce(p.slug || '-foundation-purple', p.id::text),
-  coalesce(p.color_name, p.variant_name, p.name),
+  coalesce(p.variant_name, p.color_name, p.name),
   p.color_name,
   lower(replace(coalesce(p.color_name, 'default'), ' ', '-')),
   p.variant_name,
