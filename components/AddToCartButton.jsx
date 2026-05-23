@@ -5,10 +5,15 @@ import { addToCart } from '../lib/cart';
 
 export default function AddToCartButton({
   id,
+  slug = null,
   title,
   price,
   size = null,
   variant = null,
+  category = null,
+  colorName = null,
+  imageFront = null,
+  imageBack = null,
   qty = 1,
   className = '',
   children,
@@ -18,7 +23,21 @@ export default function AddToCartButton({
 
   const onAdd = () => {
     setAdding(true);
-    addToCart({ id, title, price, size, variant, qty });
+
+    addToCart({
+      id,
+      slug,
+      title,
+      price,
+      size,
+      variant,
+      category,
+      colorName,
+      imageFront,
+      imageBack,
+      qty,
+    });
+
     setAdding(false);
     setOk(true);
     setTimeout(() => setOk(false), 1200);

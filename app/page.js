@@ -138,6 +138,8 @@ export default function Home() {
                 : null;
 
               const priceLabel = formatEURFromCents(p.price_cents);
+              const sizeLabel = p.category === 'headwear' ? 'OS' : 'M';
+              const variantLabel = p.color_name || '—';
 
               return (
                 <motion.div
@@ -204,10 +206,15 @@ export default function Home() {
 
                     <AddToCartButton
                       id={p.slug}
+                      slug={p.slug}
                       title={p.name}
                       price={Number(p.price_cents || 0) / 100}
-                      size={p.category === 'headwear' ? 'OS' : 'M'}
-                      variant={p.color_name || '—'}
+                      size={sizeLabel}
+                      variant={variantLabel}
+                      category={p.category || null}
+                      colorName={p.color_name || null}
+                      imageFront={imgFront}
+                      imageBack={imgBack}
                       className="w-full"
                     >
                       Aggiungi al carrello
