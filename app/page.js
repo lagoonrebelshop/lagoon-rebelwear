@@ -35,10 +35,21 @@ function storagePublicUrl(path) {
   return `${base}/storage/v1/object/public/product-images/${path}`;
 }
 
+function getSizeOptions(category) {
+  if (category === 'headwear') return ['OS'];
+  return ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+}
+
+function getSizeHelper(category) {
+  if (category === 'headwear') return 'Taglia unica regolabile';
+  return 'Seleziona la tua taglia';
+}
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeImg, setActiveImg] = useState({}); // { productId: 1|2 }
+  const [selectedSizes, setSelectedSizes] = useState({}); // { productId: size }
 
   const ASSET_V = '20260215';
   const hasBackBySlug = useMemo(() => new Set(['foundation-hoodie']), []);
@@ -138,8 +149,13 @@ export default function Home() {
                 : null;
 
               const priceLabel = formatEURFromCents(p.price_cents);
-              const sizeLabel = p.category === 'headwear' ? 'OS' : 'M';
               const variantLabel = p.color_name || '—';
+
+              const sizeOptions = getSizeOptions(p.category);
+              const isOneSize = sizeOptions.length === 1;
+              const selectedSize = isOneSize ? sizeOptions[0] : selectedSizes[p.id] || null;
+              const canAddToCart = Boolean(selectedSize);
+              const sizeHelper = getSizeHelper(p.category);
 
               return (
                 <motion.div
@@ -191,17 +207,65 @@ export default function Home() {
                     </span>
                   </div>
 
-                  <div className="border-t border-white/10 bg-black/70 px-4 py-3 flex flex-col gap-2">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{p.name}</h3>
+                  <div
+                    className="border-t border-white/10 bg-black/70 px-4 py-3 flex flex-col gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="min-w-0">
+                        <h3 className="font-semibold truncate">{p.name}</h3>
                         <p className="text-white/70 text-sm">
                           Venezia • Lagoon Rebel Wear
                         </p>
                       </div>
-                      <span className="font-semibold">
+                      <span className="font-semibold shrink-0">
                         {priceLabel}
                       </span>
+                    </div>
+
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                          Taglia
+                        </p>
+                        <p className="text-[11px] text-white/50 text-right">
+                          {selectedSize ? `Selezionata: ${selectedSize}` : sizeHelper}
+                        </p>
+                      </div>
+
+                      <div className={isOneSize ? 'grid grid-cols-1 gap-2' : 'grid grid-cols-3 gap-2'}>
+                        {sizeOptions.map((size) => {
+                          const active = selectedSize === size;
+
+                          return (
+                            <button
+                              key={size}
+                              type="button"
+                              onClick={() => {
+                                setSelectedSizes((prev) => ({
+                                  ...prev,
+                                  [p.id]: size,
+                                }));
+                              }}
+                              className={[
+                                'h-10 rounded-md border text-xs font-semibold transition',
+                                active
+                                  ? 'border-white bg-white text-black'
+                                  : 'border-white/15 bg-white/[0.03] text-white/75 hover:border-white/40 hover:bg-white/10',
+                              ].join(' ')}
+                              aria-pressed={active}
+                            >
+                              {size}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {isOneSize && (
+                        <p className="mt-2 text-[11px] text-white/45">
+                          Taglia unica regolabile sul retro.
+                        </p>
+                      )}
                     </div>
 
                     <AddToCartButton
@@ -209,15 +273,16 @@ export default function Home() {
                       slug={p.slug}
                       title={p.name}
                       price={Number(p.price_cents || 0) / 100}
-                      size={sizeLabel}
+                      size={selectedSize}
                       variant={variantLabel}
                       category={p.category || null}
                       colorName={p.color_name || null}
                       imageFront={imgFront}
                       imageBack={imgBack}
+                      disabled={!canAddToCart}
                       className="w-full"
                     >
-                      Aggiungi al carrello
+                      {canAddToCart ? 'Aggiungi al carrello' : 'Seleziona una taglia'}
                     </AddToCartButton>
                   </div>
                 </motion.div>

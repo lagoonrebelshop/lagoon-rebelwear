@@ -15,13 +15,18 @@ export default function AddToCartButton({
   imageFront = null,
   imageBack = null,
   qty = 1,
+  disabled = false,
   className = '',
   children,
 }) {
   const [adding, setAdding] = useState(false);
   const [ok, setOk] = useState(false);
 
+  const isDisabled = disabled || adding;
+
   const onAdd = () => {
+    if (isDisabled) return;
+
     setAdding(true);
 
     addToCart({
@@ -47,8 +52,8 @@ export default function AddToCartButton({
     <button
       type="button"
       onClick={onAdd}
-      disabled={adding}
-      className={`rounded-md px-4 py-2 text-sm font-medium text-white ring-1 ring-white/10 hover:bg-white/5 disabled:opacity-60 ${className}`}
+      disabled={isDisabled}
+      className={`rounded-md px-4 py-2 text-sm font-medium text-white ring-1 ring-white/10 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-transparent ${className}`}
       aria-label="Aggiungi al carrello"
     >
       {ok ? 'Aggiunto ✓' : children ?? 'Aggiungi al carrello'}
