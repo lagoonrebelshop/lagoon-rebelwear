@@ -129,6 +129,31 @@ export default function Navbar() {
   const navHeight = shrink ? 'h-14 md:h-16' : 'h-16 md:h-20';
   const bgOpacity = shrink ? 'bg-black/95' : 'bg-black/80';
 
+  // ✅ MISURA ALTEZZA NAVBAR → scrive --nav-h (serve al layout e al hero)
+  useEffect(() => {
+    const header = document.getElementById('lr-navbar');
+    if (!header) return;
+
+    const apply = () => {
+      const h = header.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--nav-h', `${Math.round(h)}px`);
+    };
+
+    apply();
+
+    const ro = new ResizeObserver(() => apply());
+    ro.observe(header);
+
+    window.addEventListener('resize', apply);
+    window.addEventListener('orientationchange', apply);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', apply);
+      window.removeEventListener('orientationchange', apply);
+    };
+  }, [shrink, mobileOpen]);
+
   const NavButton = ({ href, children, className = '', onClick }) => (
     <Link
       href={href}
@@ -147,6 +172,7 @@ export default function Navbar() {
 
   return (
     <header
+      id="lr-navbar"
       role="banner"
       aria-label="Barra di navigazione"
       className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 backdrop-blur-md transition-all duration-300 ${bgOpacity}`}

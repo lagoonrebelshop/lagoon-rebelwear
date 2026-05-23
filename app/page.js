@@ -7,15 +7,6 @@ import AddToCartButton from '@/components/AddToCartButton';
 import { createClient } from '@/lib/supabase-client';
 
 // Animazioni
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const stagger = {
-  visible: { transition: { staggerChildren: 0.12 } },
-};
-
 const cardIn = {
   hidden: { opacity: 0, y: 20, scale: 0.98 },
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5 } },
@@ -47,14 +38,9 @@ function storagePublicUrl(path) {
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeImg, setActiveImg] = useState({}); // { productId: 1|2 }
 
-  // ✅ Toggle mobile (tap) + stato immagine per prodotto: 1 = front, 2 = back
-  const [activeImg, setActiveImg] = useState({}); // { [productId]: 1|2 }
-
-  // ✅ Cache-busting semplice: cambia valore quando fai replace delle immagini
   const ASSET_V = '20260215';
-
-  // slug che hanno sicuramente la 02.png (per ora: solo hoodie)
   const hasBackBySlug = useMemo(() => new Set(['foundation-hoodie']), []);
 
   useEffect(() => {
@@ -81,35 +67,46 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <main className="relative h-[100svh] w-full overflow-hidden bg-neutral-900">
-        <motion.video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="/Gondole01.mp4" type="video/mp4" />
-        </motion.video>
+      <main className="relative w-full overflow-hidden bg-neutral-900">
+        <section className="relative h-[calc(100svh-var(--nav-h))] min-h-[560px] w-full overflow-hidden bg-black md:min-h-[680px]">
+          {/* VIDEO */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            className="absolute inset-0 z-0 h-full !h-full w-full object-cover"
+          >
+            <source src="/Gondole01.mp4" type="video/mp4" />
+          </video>
 
-        <div className="absolute inset-0 bg-black/50" />
+          {/* OVERLAY CINEMATICO */}
+          <div className="absolute inset-0 z-10 bg-black/35" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/35 to-black/10" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/45 via-transparent to-transparent" />
 
-        <div className="relative z-10 h-full flex items-end max-w-6xl mx-auto px-6 pb-16">
-          <div>
-            <p className="text-white/70 text-xs tracking-[0.25em] mb-3">
-              DROP 01 • FOUNDATION • VENEZIA
-            </p>
-            <h1 className="text-white text-4xl md:text-6xl font-bold">
-              Lagoon Rebel Wear
-            </h1>
-            <p className="mt-3 text-white/90 max-w-xl">
-              Streetwear nato a Venezia. Minimal. Strutturato. Intenzionale.
-            </p>
-            <div className="mt-8">
-              <CtaScopri />
+          {/* TESTI SOPRA IL VIDEO */}
+          <div className="relative z-20 flex h-full w-full items-end">
+            <div className="mx-auto w-full max-w-6xl px-6 pb-14 md:pb-20">
+              <p className="mb-3 text-xs tracking-[0.32em] text-white/75 md:text-sm">
+                DROP 01 • FOUNDATION • VENEZIA
+              </p>
+
+              <h1 className="max-w-4xl text-5xl font-extrabold leading-[0.95] tracking-tight text-white md:text-7xl">
+                Lagoon Rebel Wear
+              </h1>
+
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/88 md:text-lg">
+                Streetwear nato a Venezia. Minimal. Strutturato. Intenzionale.
+              </p>
+
+              <div className="mt-9">
+                <CtaScopri />
+              </div>
             </div>
           </div>
-        </div>
+        </section>
       </main>
 
       {/* SHOP */}
@@ -147,8 +144,7 @@ export default function Home() {
                   key={p.id}
                   variants={cardIn}
                   whileHover={{ y: -4 }}
-                  className="group rounded-2xl overflow-hidden bg-neutral-800/60 border border-white/10 flex flex-col"
-                  // ✅ Desktop: hover mostra retro (se esiste)
+                  className="group rounded-2xl overflow-hidden bg-neutral-800 border border-white/10 flex flex-col"
                   onMouseEnter={() => {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({ ...prev, [p.id]: 2 }));
@@ -157,45 +153,43 @@ export default function Home() {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({ ...prev, [p.id]: 1 }));
                   }}
-                  // ✅ Mobile: tap alterna 01/02 (solo se esiste 02)
                   onClick={() => {
                     if (!hasBack) return;
-                    setActiveImg((prev) => ({ ...prev, [p.id]: (prev[p.id] === 2 ? 1 : 2) }));
+                    setActiveImg((prev) => ({
+                      ...prev,
+                      [p.id]: prev[p.id] === 2 ? 1 : 2,
+                    }));
                   }}
                 >
-                  <div className="relative aspect-[4/5] w-full bg-black/20 overflow-hidden">
-                    <div className="relative w-full h-full">
-                      {/* FRONT */}
+                  <div className="relative aspect-[4/5] w-full bg-black overflow-hidden">
+                    <img
+                      src={imgFront}
+                      alt={`${p.name} - Front`}
+                      className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
+                        hasBack ? (which === 1 ? 'opacity-100' : 'opacity-0') : 'opacity-100'
+                      }`}
+                      loading="lazy"
+                      draggable="false"
+                    />
+
+                    {imgBack && (
                       <img
-                        src={imgFront}
-                        alt={p.name}
-                        className={`absolute inset-0 h-full w-full object-contain max-h-full max-w-full transition-opacity duration-300 ${
-                          hasBack
-                            ? (which === 1 ? 'opacity-100' : 'opacity-0')
-                            : 'opacity-100'
+                        src={imgBack}
+                        alt={`${p.name} - Back`}
+                        className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
+                          which === 2 ? 'opacity-100' : 'opacity-0'
                         }`}
                         loading="lazy"
+                        draggable="false"
                       />
-
-                      {/* BACK (solo per hoodie) */}
-                      {imgBack && (
-                        <img
-                          src={imgBack}
-                          alt={p.name}
-                          className={`absolute inset-0 h-full w-full object-contain max-h-full max-w-full transition-opacity duration-300 ${
-                            which === 2 ? 'opacity-100' : 'opacity-0'
-                          }`}
-                          loading="lazy"
-                        />
-                      )}
-                    </div>
+                    )}
 
                     <span className="absolute left-3 top-3 text-[11px] font-semibold bg-white text-black px-2 py-1 rounded-full">
                       Foundation
                     </span>
                   </div>
 
-                  <div className="border-t border-white/10 bg-black/60 px-4 py-3 flex flex-col gap-2">
+                  <div className="border-t border-white/10 bg-black/70 px-4 py-3 flex flex-col gap-2">
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold">{p.name}</h3>

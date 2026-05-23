@@ -1,13 +1,16 @@
-import { Inter } from 'next/font/google'
-import './globals.css'
-import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
-import CookieBanner from '@/components/CookieBanner'
-import TrustBarSlim from '@/components/TrustBarSlim'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { createClient } from '@/lib/supabase-server'
+// app/layout.js
+import { Inter } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ['latin'] })
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import CookieBanner from '@/components/CookieBanner';
+import TrustBarSlim from '@/components/TrustBarSlim';
+
+import { AuthProvider } from '@/contexts/AuthContext';
+import { createClient } from '@/lib/supabase-server';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
   metadataBase: new URL('https://www.lagoonrebelwear.com'),
@@ -52,29 +55,33 @@ export const metadata = {
     shortcut: ['/favicon-legacy.ico?v=20251007'],
   },
   manifest: '/manifest.webmanifest',
-}
+};
 
 export default async function RootLayout({ children }) {
-  const supabase = createClient()
-  const { data: { session }, error } = await supabase.auth.getSession()
-  
-  if (error) {
-    console.error('Error fetching session in layout:', error)
-  }
+  const supabase = await createClient();
 
-  const user = session?.user ?? null
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const user = session?.user ?? null;
 
   return (
     <html lang="it">
       <body className={`${inter.className} bg-neutral-900 text-white`}>
         <AuthProvider initialSession={session} initialUser={user}>
           <Navbar />
-          <div className="pt-24 md:pt-28 lg:pt-32">{children}</div>
-          <TrustBarSlim />
-          <Footer />
-          <CookieBanner />
+
+          {/* ✅ Tutto il sito sotto la navbar fixed */}
+          <div className="pt-[var(--nav-h)] min-h-screen">
+            {children}
+
+            <TrustBarSlim />
+            <Footer />
+            <CookieBanner />
+          </div>
         </AuthProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -8,6 +8,7 @@ out
 .env
 .env.*
 !.env.example
+.env.local
 
 # os / editor
 .DS_Store
@@ -17,5 +18,8 @@ Thumbs.db
 # backups / temp
 *.bak
 *.tmp
+*.save
 app/search/page.js.bak
-.env.local
+
+# Supabase local temp
+supabase/.temp/
