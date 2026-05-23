@@ -22,4 +22,5 @@ Thumbs.db
 app/search/page.js.bak
 
 # Supabase local temp
+tmp/
 supabase/.temp/
