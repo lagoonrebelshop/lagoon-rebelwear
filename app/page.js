@@ -45,16 +45,16 @@ function getSizeHelper(category) {
   return 'Seleziona la tua taglia';
 }
 
-function getPrimaryStyle(product) {
+function getVisibleStyles(product) {
   const styles = Array.isArray(product?.product_styles)
     ? product.product_styles
     : [];
 
-  const visibleStyles = styles
+  return styles
     .filter((style) => {
       const visible = style.visibility === 'public';
-      const sellableStatus = ['coming_soon', 'live', 'sold_out'].includes(style.status);
-      return visible && sellableStatus;
+      const validStatus = ['coming_soon', 'live', 'sold_out'].includes(style.status);
+      return visible && validStatus;
     })
     .sort((a, b) => {
       const orderA = Number(a.sort_order) || 0;
@@ -64,20 +64,39 @@ function getPrimaryStyle(product) {
 
       return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
     });
+}
 
-  return visibleStyles[0] || null;
+function getPrimaryStyle(product) {
+  return getVisibleStyles(product)[0] || null;
+}
+
+function getColorButtonClass(colorSlug, active) {
+  const base =
+    'h-10 rounded-md border px-3 text-xs font-semibold transition flex items-center justify-center gap-2';
+
+  if (active) {
+    return `${base} border-white bg-white text-black`;
+  }
+
+  if (colorSlug === 'white') {
+    return `${base} border-white/20 bg-white text-black hover:border-white`;
+  }
+
+  return `${base} border-white/15 bg-black text-white/80 hover:border-white/40 hover:bg-white/10`;
 }
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeImg, setActiveImg] = useState({}); // { productOrStyleId: 1|2 }
-  const [selectedSizes, setSelectedSizes] = useState({}); // { productOrStyleId: size }
+  const [activeImg, setActiveImg] = useState({}); // { styleId: 1|2 }
+  const [selectedSizes, setSelectedSizes] = useState({}); // { productId: size }
+  const [selectedStyleIds, setSelectedStyleIds] = useState({}); // { productId: styleId }
 
   const ASSET_V = '20260215';
 
   // Per ora sappiamo che il retro è presente sulla hoodie.
-  // Più avanti lo renderemo data-driven tramite product_images o metadata.
+  // Tee: solo fronte. Hoodie: fronte + retro.
+  // Più avanti lo renderemo data-driven tramite product_images.
   const hasBackBySlug = useMemo(() => new Set(['foundation-hoodie']), []);
 
   useEffect(() => {
@@ -185,7 +204,7 @@ export default function Home() {
               Drop 01 — Foundation
             </h2>
             <p className="text-white/70 mt-3">
-              <span className="font-semibold text-white">COLOR:</span> Foundation Purple
+              Black essentials with Foundation Purple embroidery.
             </p>
           </div>
 
@@ -197,13 +216,17 @@ export default function Home() {
             )}
 
             {!loading && products.map((p) => {
+              const visibleStyles = getVisibleStyles(p);
               const primaryStyle = getPrimaryStyle(p);
-              const cardKey = primaryStyle?.id || p.id;
+              const selectedStyle =
+                visibleStyles.find((style) => style.id === selectedStyleIds[p.id]) ||
+                primaryStyle;
 
+              const styleKey = selectedStyle?.id || p.id;
               const hasBack = hasBackBySlug.has(p.slug);
-              const which = activeImg[cardKey] || 1;
+              const which = activeImg[styleKey] || 1;
 
-              const imagesFolder = primaryStyle?.images_folder || p.images_folder;
+              const imagesFolder = selectedStyle?.images_folder || p.images_folder;
               const imgFront = imagesFolder
                 ? storagePublicUrl(`${imagesFolder}/01.png?v=${ASSET_V}`)
                 : '/og.jpg';
@@ -211,38 +234,40 @@ export default function Home() {
                 ? storagePublicUrl(`${imagesFolder}/02.png?v=${ASSET_V}`)
                 : null;
 
-              const priceCents = primaryStyle?.price_cents ?? p.base_price_cents ?? p.price_cents;
+              const priceCents = selectedStyle?.price_cents ?? p.base_price_cents ?? p.price_cents;
               const priceLabel = formatEURFromCents(priceCents);
 
-              const colorLabel = primaryStyle?.color_name || p.color_name || '—';
-              const graphicLabel = primaryStyle?.graphic_name || null;
+              const colorLabel = selectedStyle?.color_name || p.color_name || '—';
+              const graphicLabel = selectedStyle?.graphic_name || null;
               const variantLabel = graphicLabel ? `${colorLabel} • ${graphicLabel}` : colorLabel;
 
               const sizeOptions = getSizeOptions(p.category);
               const isOneSize = sizeOptions.length === 1;
-              const selectedSize = isOneSize ? sizeOptions[0] : selectedSizes[cardKey] || null;
-              const canAddToCart = Boolean(selectedSize);
+              const selectedSize = isOneSize ? sizeOptions[0] : selectedSizes[p.id] || null;
+              const canAddToCart = Boolean(selectedSize && selectedStyle);
               const sizeHelper = getSizeHelper(p.category);
+
+              const showColorSelector = visibleStyles.length > 1;
 
               return (
                 <motion.div
-                  key={cardKey}
+                  key={p.id}
                   variants={cardIn}
                   whileHover={{ y: -4 }}
                   className="group rounded-2xl overflow-hidden bg-neutral-800 border border-white/10 flex flex-col"
                   onMouseEnter={() => {
                     if (!hasBack) return;
-                    setActiveImg((prev) => ({ ...prev, [cardKey]: 2 }));
+                    setActiveImg((prev) => ({ ...prev, [styleKey]: 2 }));
                   }}
                   onMouseLeave={() => {
                     if (!hasBack) return;
-                    setActiveImg((prev) => ({ ...prev, [cardKey]: 1 }));
+                    setActiveImg((prev) => ({ ...prev, [styleKey]: 1 }));
                   }}
                   onClick={() => {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({
                       ...prev,
-                      [cardKey]: prev[cardKey] === 2 ? 1 : 2,
+                      [styleKey]: prev[styleKey] === 2 ? 1 : 2,
                     }));
                   }}
                 >
@@ -290,6 +315,56 @@ export default function Home() {
                       </span>
                     </div>
 
+                    {showColorSelector && (
+                      <div>
+                        <div className="mb-2 flex items-center justify-between gap-3">
+                          <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                            Colore
+                          </p>
+                          <p className="text-[11px] text-white/50 text-right">
+                            {colorLabel}
+                          </p>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          {visibleStyles.map((style) => {
+                            const active = selectedStyle?.id === style.id;
+                            const label = style.color_name || style.name || 'Style';
+
+                            return (
+                              <button
+                                key={style.id}
+                                type="button"
+                                onClick={() => {
+                                  setSelectedStyleIds((prev) => ({
+                                    ...prev,
+                                    [p.id]: style.id,
+                                  }));
+
+                                  setActiveImg((prev) => ({
+                                    ...prev,
+                                    [style.id]: 1,
+                                  }));
+                                }}
+                                className={getColorButtonClass(style.color_slug, active)}
+                                aria-pressed={active}
+                              >
+                                <span
+                                  className={[
+                                    'h-3 w-3 rounded-full border',
+                                    style.color_slug === 'white'
+                                      ? 'bg-white border-black/30'
+                                      : 'bg-black border-white/30',
+                                  ].join(' ')}
+                                />
+                                {label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
                     <div>
                       <div className="mb-2 flex items-center justify-between gap-3">
                         <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
@@ -311,7 +386,7 @@ export default function Home() {
                               onClick={() => {
                                 setSelectedSizes((prev) => ({
                                   ...prev,
-                                  [cardKey]: size,
+                                  [p.id]: size,
                                 }));
                               }}
                               className={[
