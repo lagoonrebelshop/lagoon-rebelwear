@@ -31,7 +31,7 @@ function formatEURFromCents(cents) {
 
 function storagePublicUrl(path) {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  if (!base) return '';
+  if (!base || !path) return '';
   return `${base}/storage/v1/object/public/product-images/${path}`;
 }
 
@@ -45,13 +45,39 @@ function getSizeHelper(category) {
   return 'Seleziona la tua taglia';
 }
 
+function getPrimaryStyle(product) {
+  const styles = Array.isArray(product?.product_styles)
+    ? product.product_styles
+    : [];
+
+  const visibleStyles = styles
+    .filter((style) => {
+      const visible = style.visibility === 'public';
+      const sellableStatus = ['coming_soon', 'live', 'sold_out'].includes(style.status);
+      return visible && sellableStatus;
+    })
+    .sort((a, b) => {
+      const orderA = Number(a.sort_order) || 0;
+      const orderB = Number(b.sort_order) || 0;
+
+      if (orderA !== orderB) return orderA - orderB;
+
+      return new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+    });
+
+  return visibleStyles[0] || null;
+}
+
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeImg, setActiveImg] = useState({}); // { productId: 1|2 }
-  const [selectedSizes, setSelectedSizes] = useState({}); // { productId: size }
+  const [activeImg, setActiveImg] = useState({}); // { productOrStyleId: 1|2 }
+  const [selectedSizes, setSelectedSizes] = useState({}); // { productOrStyleId: size }
 
   const ASSET_V = '20260215';
+
+  // Per ora sappiamo che il retro è presente sulla hoodie.
+  // Più avanti lo renderemo data-driven tramite product_images o metadata.
   const hasBackBySlug = useMemo(() => new Set(['foundation-hoodie']), []);
 
   useEffect(() => {
@@ -60,8 +86,39 @@ export default function Home() {
     (async () => {
       const { data, error } = await supabase
         .from('products')
-        .select('id, name, slug, price_cents, images_folder, category, color_name, status, created_at')
+        .select(`
+          id,
+          drop_id,
+          name,
+          slug,
+          price_cents,
+          base_price_cents,
+          images_folder,
+          category,
+          color_name,
+          status,
+          visibility,
+          created_at,
+          product_styles (
+            id,
+            product_id,
+            slug,
+            name,
+            color_name,
+            color_slug,
+            graphic_name,
+            edition_type,
+            price_cents,
+            currency,
+            status,
+            visibility,
+            images_folder,
+            sort_order,
+            created_at
+          )
+        `)
         .in('status', ['coming_soon', 'live'])
+        .eq('visibility', 'public')
         .order('created_at', { ascending: true });
 
       if (error) {
@@ -140,49 +197,59 @@ export default function Home() {
             )}
 
             {!loading && products.map((p) => {
-              const hasBack = hasBackBySlug.has(p.slug);
-              const which = activeImg[p.id] || 1;
+              const primaryStyle = getPrimaryStyle(p);
+              const cardKey = primaryStyle?.id || p.id;
 
-              const imgFront = storagePublicUrl(`${p.images_folder}/01.png?v=${ASSET_V}`);
-              const imgBack = hasBack
-                ? storagePublicUrl(`${p.images_folder}/02.png?v=${ASSET_V}`)
+              const hasBack = hasBackBySlug.has(p.slug);
+              const which = activeImg[cardKey] || 1;
+
+              const imagesFolder = primaryStyle?.images_folder || p.images_folder;
+              const imgFront = imagesFolder
+                ? storagePublicUrl(`${imagesFolder}/01.png?v=${ASSET_V}`)
+                : '/og.jpg';
+              const imgBack = hasBack && imagesFolder
+                ? storagePublicUrl(`${imagesFolder}/02.png?v=${ASSET_V}`)
                 : null;
 
-              const priceLabel = formatEURFromCents(p.price_cents);
-              const variantLabel = p.color_name || '—';
+              const priceCents = primaryStyle?.price_cents ?? p.base_price_cents ?? p.price_cents;
+              const priceLabel = formatEURFromCents(priceCents);
+
+              const colorLabel = primaryStyle?.color_name || p.color_name || '—';
+              const graphicLabel = primaryStyle?.graphic_name || null;
+              const variantLabel = graphicLabel ? `${colorLabel} • ${graphicLabel}` : colorLabel;
 
               const sizeOptions = getSizeOptions(p.category);
               const isOneSize = sizeOptions.length === 1;
-              const selectedSize = isOneSize ? sizeOptions[0] : selectedSizes[p.id] || null;
+              const selectedSize = isOneSize ? sizeOptions[0] : selectedSizes[cardKey] || null;
               const canAddToCart = Boolean(selectedSize);
               const sizeHelper = getSizeHelper(p.category);
 
               return (
                 <motion.div
-                  key={p.id}
+                  key={cardKey}
                   variants={cardIn}
                   whileHover={{ y: -4 }}
                   className="group rounded-2xl overflow-hidden bg-neutral-800 border border-white/10 flex flex-col"
                   onMouseEnter={() => {
                     if (!hasBack) return;
-                    setActiveImg((prev) => ({ ...prev, [p.id]: 2 }));
+                    setActiveImg((prev) => ({ ...prev, [cardKey]: 2 }));
                   }}
                   onMouseLeave={() => {
                     if (!hasBack) return;
-                    setActiveImg((prev) => ({ ...prev, [p.id]: 1 }));
+                    setActiveImg((prev) => ({ ...prev, [cardKey]: 1 }));
                   }}
                   onClick={() => {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({
                       ...prev,
-                      [p.id]: prev[p.id] === 2 ? 1 : 2,
+                      [cardKey]: prev[cardKey] === 2 ? 1 : 2,
                     }));
                   }}
                 >
                   <div className="relative aspect-[4/5] w-full bg-black overflow-hidden">
                     <img
                       src={imgFront}
-                      alt={`${p.name} - Front`}
+                      alt={`${p.name} - ${colorLabel} - Front`}
                       className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
                         hasBack ? (which === 1 ? 'opacity-100' : 'opacity-0') : 'opacity-100'
                       }`}
@@ -193,7 +260,7 @@ export default function Home() {
                     {imgBack && (
                       <img
                         src={imgBack}
-                        alt={`${p.name} - Back`}
+                        alt={`${p.name} - ${colorLabel} - Back`}
                         className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
                           which === 2 ? 'opacity-100' : 'opacity-0'
                         }`}
@@ -214,8 +281,8 @@ export default function Home() {
                     <div className="flex items-center justify-between gap-4">
                       <div className="min-w-0">
                         <h3 className="font-semibold truncate">{p.name}</h3>
-                        <p className="text-white/70 text-sm">
-                          Venezia • Lagoon Rebel Wear
+                        <p className="text-white/70 text-sm truncate">
+                          {variantLabel}
                         </p>
                       </div>
                       <span className="font-semibold shrink-0">
@@ -244,7 +311,7 @@ export default function Home() {
                               onClick={() => {
                                 setSelectedSizes((prev) => ({
                                   ...prev,
-                                  [p.id]: size,
+                                  [cardKey]: size,
                                 }));
                               }}
                               className={[
@@ -272,11 +339,11 @@ export default function Home() {
                       id={p.slug}
                       slug={p.slug}
                       title={p.name}
-                      price={Number(p.price_cents || 0) / 100}
+                      price={Number(priceCents || 0) / 100}
                       size={selectedSize}
                       variant={variantLabel}
                       category={p.category || null}
-                      colorName={p.color_name || null}
+                      colorName={colorLabel}
                       imageFront={imgFront}
                       imageBack={imgBack}
                       disabled={!canAddToCart}
