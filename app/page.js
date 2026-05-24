@@ -1,6 +1,7 @@
 // app/page.js
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import AddToCartButton from '@/components/AddToCartButton';
@@ -124,15 +125,12 @@ function getColorButtonClass(colorSlug, active) {
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeImg, setActiveImg] = useState({}); // { styleId: 1|2 }
-  const [selectedSizes, setSelectedSizes] = useState({}); // { productId: size }
-  const [selectedStyleIds, setSelectedStyleIds] = useState({}); // { productId: styleId }
+  const [activeImg, setActiveImg] = useState({});
+  const [selectedSizes, setSelectedSizes] = useState({});
+  const [selectedStyleIds, setSelectedStyleIds] = useState({});
 
   const ASSET_V = '20260215';
 
-  // Per ora sappiamo che il retro è presente sulla hoodie.
-  // Tee: solo fronte. Hoodie: fronte + retro.
-  // Più avanti lo renderemo data-driven tramite product_images.
   const hasBackBySlug = useMemo(() => new Set(['foundation-hoodie']), []);
 
   useEffect(() => {
@@ -338,10 +336,12 @@ export default function Home() {
                   }}
                 >
                   <div className="relative aspect-[4/5] w-full overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(143,92,255,0.13),transparent_32%),#050505]">
-                    <img
+                    <Image
                       src={imgFront}
                       alt={`${p.name} - ${colorLabel} - Front`}
-                      className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className={`object-contain transition-opacity duration-300 ${
                         hasBack ? (which === 1 ? 'opacity-100' : 'opacity-0') : 'opacity-100'
                       }`}
                       loading="lazy"
@@ -349,10 +349,12 @@ export default function Home() {
                     />
 
                     {imgBack && (
-                      <img
+                      <Image
                         src={imgBack}
                         alt={`${p.name} - ${colorLabel} - Back`}
-                        className={`absolute inset-0 h-full w-full object-contain transition-opacity duration-300 ${
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        className={`object-contain transition-opacity duration-300 ${
                           which === 2 ? 'opacity-100' : 'opacity-0'
                         }`}
                         loading="lazy"
