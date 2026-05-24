@@ -72,30 +72,38 @@ export default function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-6xl px-4 pt-24 pb-16 text-white">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-[12px] uppercase tracking-[0.24em] text-white/50">
+          <p className="text-[12px] uppercase tracking-[0.24em] text-[#a78bfa]/80">
             Lagoon Rebel Wear
           </p>
 
-          <h1 className="mt-2 font-serif text-4xl leading-none tracking-tight text-white sm:text-5xl">
+          <h1 className="mt-3 font-serif text-4xl leading-none tracking-tight text-white sm:text-5xl">
             Checkout
           </h1>
+
+          <div className="mt-5 h-px w-24 bg-gradient-to-r from-[#8b5cf6] to-transparent" />
+
+          <p className="mt-5 max-w-xl text-sm leading-6 text-white/60">
+            Inserisci i dati di contatto e verifica il riepilogo ordine prima del pagamento.
+          </p>
         </div>
 
         <Link
           href="/cart"
-          className="text-sm text-white/60 underline-offset-4 hover:text-white hover:underline"
+          className="w-max text-sm text-white/60 underline-offset-4 transition hover:text-[#c4b5fd] hover:underline"
         >
           Torna al carrello
         </Link>
       </div>
 
-      <div className="mt-6 h-px bg-white/10" />
-
       {items.length === 0 ? (
-        <section className="mt-10 rounded-2xl border border-white/10 bg-white/[0.04] p-8">
-          <h2 className="text-lg font-medium">Il tuo carrello è vuoto.</h2>
+        <section className="relative mt-10 overflow-hidden rounded-2xl border border-[#8b5cf6]/20 bg-white/[0.04] p-8 shadow-[0_0_45px_rgba(139,92,246,0.07)]">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/60 to-transparent" />
+
+          <h2 className="text-lg font-medium text-white">
+            Il tuo carrello è vuoto.
+          </h2>
 
           <p className="mt-2 max-w-xl text-sm leading-6 text-white/60">
             Per procedere al checkout devi prima aggiungere almeno un prodotto al carrello.
@@ -104,14 +112,14 @@ export default function CheckoutPage() {
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/"
-              className="inline-flex items-center justify-center rounded-md bg-white px-5 py-3 text-sm font-bold uppercase tracking-wide text-black transition hover:bg-white/90"
+              className="inline-flex items-center justify-center rounded-md bg-[#8b5cf6] px-5 py-3 text-sm font-bold uppercase tracking-wide text-white shadow-[0_0_28px_rgba(139,92,246,0.18)] transition hover:bg-[#7c3aed]"
             >
               Torna allo shop
             </Link>
 
             <Link
               href="/search"
-              className="inline-flex items-center justify-center rounded-md border border-white/10 px-5 py-3 text-sm font-bold uppercase tracking-wide text-white/80 transition hover:bg-white/5 hover:text-white"
+              className="inline-flex items-center justify-center rounded-md border border-white/10 px-5 py-3 text-sm font-bold uppercase tracking-wide text-white/80 transition hover:border-[#8b5cf6]/40 hover:bg-white/5 hover:text-white"
             >
               Cerca prodotti
             </Link>
@@ -119,9 +127,11 @@ export default function CheckoutPage() {
         </section>
       ) : (
         <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
-          <section className="min-w-0 rounded-2xl border border-white/10 bg-black/40 p-5 sm:p-7">
+          <section className="relative min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5 shadow-[0_0_45px_rgba(139,92,246,0.05)] sm:p-7">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/45 to-transparent" />
+
             <div>
-              <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">
+              <p className="text-[11px] uppercase tracking-[0.22em] text-[#a78bfa]/80">
                 Dati cliente
               </p>
 
@@ -143,7 +153,7 @@ export default function CheckoutPage() {
                     value={form.firstName}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                     placeholder="Nome"
                   />
                 </label>
@@ -155,7 +165,7 @@ export default function CheckoutPage() {
                     value={form.lastName}
                     onChange={handleChange}
                     autoComplete="family-name"
-                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                     placeholder="Cognome"
                   />
                 </label>
@@ -170,7 +180,7 @@ export default function CheckoutPage() {
                     value={form.email}
                     onChange={handleChange}
                     autoComplete="email"
-                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                     placeholder="email@esempio.it"
                   />
                 </label>
@@ -182,7 +192,7 @@ export default function CheckoutPage() {
                     value={form.phone}
                     onChange={handleChange}
                     autoComplete="tel"
-                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                     placeholder="+39"
                   />
                 </label>
@@ -195,7 +205,7 @@ export default function CheckoutPage() {
                   value={form.address}
                   onChange={handleChange}
                   autoComplete="street-address"
-                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                   placeholder="Via, numero civico"
                 />
               </label>
@@ -208,7 +218,7 @@ export default function CheckoutPage() {
                     value={form.city}
                     onChange={handleChange}
                     autoComplete="address-level2"
-                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                     placeholder="Città"
                   />
                 </label>
@@ -221,7 +231,7 @@ export default function CheckoutPage() {
                       value={form.postalCode}
                       onChange={handleChange}
                       autoComplete="postal-code"
-                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                       placeholder="00000"
                     />
                   </label>
@@ -233,7 +243,7 @@ export default function CheckoutPage() {
                       value={form.province}
                       onChange={handleChange}
                       autoComplete="address-level1"
-                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                       placeholder="VE"
                     />
                   </label>
@@ -247,7 +257,7 @@ export default function CheckoutPage() {
                   value={form.country}
                   onChange={handleChange}
                   autoComplete="country-name"
-                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                   placeholder="Italia"
                 />
               </label>
@@ -259,7 +269,7 @@ export default function CheckoutPage() {
                   value={form.notes}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full resize-none rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full resize-none rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/70 focus:bg-white/[0.06] focus:shadow-[0_0_20px_rgba(139,92,246,0.10)]"
                   placeholder="Eventuali indicazioni per la consegna"
                 />
               </label>
@@ -267,7 +277,7 @@ export default function CheckoutPage() {
               <button
                 type="button"
                 disabled
-                className="mt-3 inline-flex w-full cursor-not-allowed items-center justify-center rounded-md bg-white/40 px-5 py-3 text-sm font-bold uppercase tracking-wide text-black"
+                className="mt-3 inline-flex w-full cursor-not-allowed items-center justify-center rounded-md bg-white/35 px-5 py-3 text-sm font-bold uppercase tracking-wide text-black/80"
                 title="Pagamento non ancora collegato"
               >
                 Procedi al pagamento — prossimo step
@@ -279,10 +289,16 @@ export default function CheckoutPage() {
             </form>
           </section>
 
-          <aside className="h-max min-w-0 rounded-2xl border border-white/10 bg-black/50 p-5 sm:p-6">
-            <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">
+          <aside className="relative h-max min-w-0 overflow-hidden rounded-2xl border border-[#8b5cf6]/25 bg-black/50 p-5 shadow-[0_0_45px_rgba(139,92,246,0.08)] sm:p-6">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#8b5cf6]/70 to-transparent" />
+
+            <p className="text-[11px] uppercase tracking-[0.22em] text-[#a78bfa]/80">
               Riepilogo ordine
             </p>
+
+            <h2 className="mt-2 text-lg font-medium text-white">
+              Dettagli
+            </h2>
 
             <div className="mt-4 space-y-4">
               {items.map((it) => {
