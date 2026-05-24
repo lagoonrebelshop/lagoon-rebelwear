@@ -25,17 +25,10 @@ function FooterLink({ href, children }) {
   );
 }
 
-function ExternalFooterLink({ href, children }) {
+function FooterText({ children }) {
   return (
-    <li>
-      <a
-        href={href}
-        target="_blank"
-        rel="noreferrer"
-        className="transition hover:text-white"
-      >
-        {children}
-      </a>
+    <li className="text-white/45">
+      {children}
     </li>
   );
 }
@@ -56,31 +49,23 @@ export default function Footer() {
             </p>
 
             <h3 className="font-editorial text-4xl leading-none text-[var(--lrw-white)]">
-              Iscriviti
+              Pre-lancio
             </h3>
 
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/62">
-              Drop, aggiornamenti e storie da Venezia. Niente spam, solo comunicazioni selezionate.
+              Lagoon Rebel Wear è in fase di sviluppo. Drop, newsletter, vendita online
+              e canali ufficiali verranno attivati solo quando il brand sarà pronto.
             </p>
 
-            <form
-              onSubmit={(e) => e.preventDefault()}
-              className="mt-6 flex flex-col gap-3 sm:flex-row"
-            >
-              <input
-                type="email"
-                required
-                placeholder="la-tua@email.com"
-                className="w-full rounded-xl border border-white/10 bg-white/[0.045] px-4 py-3 text-sm text-white placeholder-white/38 outline-none transition focus:border-[rgba(143,92,255,0.62)] focus:bg-white/[0.06] focus:shadow-[0_0_18px_rgba(143,92,255,0.10)]"
-              />
+            <div className="mt-6 rounded-2xl border border-[rgba(143,92,255,0.20)] bg-white/[0.035] p-4 shadow-[0_0_28px_rgba(143,92,255,0.06)]">
+              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--lrw-purple)]">
+                Newsletter
+              </p>
 
-              <button
-                type="submit"
-                className="whitespace-nowrap rounded-xl border border-[rgba(143,92,255,0.52)] bg-[rgba(143,92,255,0.16)] px-5 py-3 text-sm font-bold text-white transition hover:border-[rgba(143,92,255,0.82)] hover:bg-[rgba(143,92,255,0.24)] hover:shadow-[0_0_22px_rgba(143,92,255,0.16)]"
-              >
-                Iscrivimi
-              </button>
-            </form>
+              <p className="mt-2 text-sm leading-relaxed text-white/55">
+                In preparazione. Nessuna iscrizione è attualmente attiva tramite questo sito.
+              </p>
+            </div>
 
             <div className="mt-7 flex max-w-xs items-center gap-3 text-[var(--lrw-purple)]/70">
               <span className="h-px flex-1 bg-[rgba(143,92,255,0.34)]" />
@@ -105,12 +90,8 @@ export default function Footer() {
           </FooterColumn>
 
           <FooterColumn title="Social">
-            <ExternalFooterLink href="https://www.instagram.com">
-              Instagram
-            </ExternalFooterLink>
-            <ExternalFooterLink href="https://www.tiktok.com">
-              TikTok
-            </ExternalFooterLink>
+            <FooterText>Instagram — in preparazione</FooterText>
+            <FooterText>TikTok — in preparazione</FooterText>
           </FooterColumn>
         </div>
 
