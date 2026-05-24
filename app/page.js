@@ -285,7 +285,7 @@ export default function Home() {
                   key={p.id}
                   variants={cardIn}
                   whileHover={{ y: -4 }}
-                  className="group rounded-2xl overflow-hidden bg-neutral-800 border border-white/10 flex flex-col"
+                  className="group overflow-hidden rounded-[1.35rem] border border-[rgba(143,92,255,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] shadow-[0_18px_55px_rgba(0,0,0,0.42)] transition hover:border-[rgba(143,92,255,0.36)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.55)] flex flex-col"
                   onMouseEnter={() => {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({ ...prev, [styleKey]: 2 }));
@@ -302,7 +302,7 @@ export default function Home() {
                     }));
                   }}
                 >
-                  <div className="relative aspect-[4/5] w-full bg-black overflow-hidden">
+                  <div className="relative aspect-[4/5] w-full overflow-hidden bg-[radial-gradient(circle_at_50%_20%,rgba(143,92,255,0.13),transparent_32%),#050505]">
                     <img
                       src={imgFront}
                       alt={`${p.name} - ${colorLabel} - Front`}
@@ -325,23 +325,27 @@ export default function Home() {
                       />
                     )}
 
-                    <span className="absolute left-3 top-3 text-[11px] font-semibold bg-white text-black px-2 py-1 rounded-full">
+                    <span className="absolute left-3 top-3 rounded-full border border-[rgba(143,92,255,0.38)] bg-[rgba(10,10,10,0.72)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--lrw-purple)] backdrop-blur">
                       Foundation
                     </span>
+
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/70 to-transparent" />
                   </div>
 
                   <div
-                    className="border-t border-white/10 bg-black/70 px-4 py-3 flex flex-col gap-3"
+                    className="border-t border-[rgba(143,92,255,0.16)] bg-black/78 px-4 py-4 flex flex-col gap-4"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="min-w-0">
-                        <h3 className="font-semibold truncate">{p.name}</h3>
-                        <p className="text-white/70 text-sm truncate">
+                        <h3 className="font-editorial truncate text-[1.35rem] leading-none text-[var(--lrw-white)]">
+                          {p.name}
+                        </h3>
+                        <p className="mt-1 text-xs font-medium text-white/58 truncate">
                           {variantLabel}
                         </p>
                       </div>
-                      <span className="font-semibold shrink-0">
+                      <span className="shrink-0 text-sm font-bold text-[var(--lrw-white)]">
                         {priceLabel}
                       </span>
                     </div>
