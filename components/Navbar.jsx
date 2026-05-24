@@ -158,14 +158,33 @@ export default function Navbar() {
     <Link
       href={href}
       onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition ${className}`}
+      className={[
+        'inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-[13px] font-medium tracking-wide text-white/80',
+        'shadow-[0_0_22px_rgba(139,92,246,0.04)] backdrop-blur-sm transition-all duration-200',
+        'hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:text-white hover:shadow-[0_0_26px_rgba(139,92,246,0.12)]',
+        className,
+      ].join(' ')}
+    >
+      {children}
+    </Link>
+  );
+
+  const CartButton = ({ href = '/cart', className = '', children }) => (
+    <Link
+      href={href}
+      className={[
+        'inline-flex items-center gap-2 rounded-full border border-[#8b5cf6]/35 bg-[#8b5cf6]/10 px-4 py-2 text-[13px] font-semibold tracking-wide text-white',
+        'shadow-[0_0_26px_rgba(139,92,246,0.10)] backdrop-blur-sm transition-all duration-200',
+        'hover:border-[#a78bfa]/60 hover:bg-[#8b5cf6]/18 hover:shadow-[0_0_34px_rgba(139,92,246,0.18)]',
+        className,
+      ].join(' ')}
     >
       {children}
     </Link>
   );
 
   const Badge = ({ value }) => (
-    <span className="ml-1 inline-flex min-w-[20px] items-center justify-center rounded-full border border-white/50 px-1.5 text-[11px] font-semibold text-white leading-none">
+    <span className="ml-1 inline-flex min-w-[20px] items-center justify-center rounded-full border border-[#a78bfa]/50 bg-black/40 px-1.5 text-[11px] font-semibold leading-none text-[#ddd6fe]">
       {value}
     </span>
   );
@@ -177,7 +196,7 @@ export default function Navbar() {
       aria-label="Barra di navigazione"
       className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 backdrop-blur-md transition-all duration-300 ${bgOpacity}`}
     >
-      <div className={`relative mx-auto ${navHeight} max-w-7xl px-4 sm:px-6 lg:px-8 transition-all duration-300`}>
+      <div className={`relative mx-auto ${navHeight} max-w-7xl px-4 transition-all duration-300 sm:px-6 lg:px-8`}>
         {/* LOGO centrato */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <Link
@@ -188,7 +207,7 @@ export default function Navbar() {
             <img
               src="/Logo.png"
               alt="Lagoon Rebel — logo"
-              className="block w-auto h-[48px] md:h-[60px] lg:h-[72px] brightness-0 invert drop-shadow"
+              className="block h-[48px] w-auto brightness-0 invert drop-shadow md:h-[60px] lg:h-[72px]"
               decoding="async"
               style={{ maxHeight: '72px' }}
             />
@@ -199,7 +218,7 @@ export default function Navbar() {
         <nav
           role="navigation"
           aria-label="Azioni desktop"
-          className="absolute inset-y-0 right-0 hidden md:flex items-center gap-3 text-white"
+          className="absolute inset-y-0 right-0 hidden items-center gap-3 text-white md:flex"
         >
           <NavButton href="/search">Cerca</NavButton>
 
@@ -209,13 +228,17 @@ export default function Navbar() {
               <div className="relative" ref={accountRef}>
                 <button
                   onClick={() => setAccountOpen((v) => !v)}
-                  className="inline-flex items-center gap-2 rounded-xl border border-white/30 px-4 py-2 text-sm hover:bg-white/10 transition"
+                  className={[
+                    'inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2 text-[13px] font-medium tracking-wide text-white/80',
+                    'shadow-[0_0_22px_rgba(139,92,246,0.04)] backdrop-blur-sm transition-all duration-200',
+                    'hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:text-white hover:shadow-[0_0_26px_rgba(139,92,246,0.12)]',
+                  ].join(' ')}
                   aria-expanded={accountOpen}
                   aria-haspopup="menu"
                 >
                   <span>Account</span>
                   <svg
-                    className={`w-4 h-4 transition-transform ${accountOpen ? 'rotate-180' : ''}`}
+                    className={`h-4 w-4 transition-transform ${accountOpen ? 'rotate-180' : ''}`}
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -228,16 +251,20 @@ export default function Navbar() {
                 {accountOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-64 bg-black/95 border border-white/20 rounded-xl shadow-xl py-2 z-50"
+                    className="absolute right-0 z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-[#8b5cf6]/25 bg-black/95 py-2 shadow-[0_0_45px_rgba(139,92,246,0.14)]"
                   >
-                    <div className="px-4 py-2 border-b border-white/10">
-                      <p className="text-xs text-white/50">Loggato come</p>
-                      <p className="text-sm font-medium truncate text-white">{user?.email}</p>
+                    <div className="border-b border-white/10 px-4 py-3">
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-[#a78bfa]/75">
+                        Loggato come
+                      </p>
+                      <p className="mt-1 truncate text-sm font-medium text-white">
+                        {user?.email}
+                      </p>
                     </div>
 
                     <Link
                       href="/account"
-                      className="block px-4 py-2 text-sm text-white hover:bg-white/10 transition"
+                      className="block px-4 py-2.5 text-sm text-white/75 transition hover:bg-[#8b5cf6]/10 hover:text-white"
                       onClick={() => setAccountOpen(false)}
                       role="menuitem"
                     >
@@ -246,7 +273,7 @@ export default function Navbar() {
 
                     <button
                       onClick={onLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/10 transition"
+                      className="block w-full px-4 py-2.5 text-left text-sm text-red-300 transition hover:bg-white/10 hover:text-red-200"
                       role="menuitem"
                     >
                       Esci
@@ -258,45 +285,106 @@ export default function Navbar() {
               <NavButton href="/login">Accedi</NavButton>
             )
           ) : (
-            <div className="w-24 h-9 bg-white/15 animate-pulse rounded-xl" aria-label="Caricamento account"></div>
+            <div className="h-9 w-24 animate-pulse rounded-full bg-white/15" aria-label="Caricamento account"></div>
           )}
 
-          <NavButton href="/cart" className="relative">
+          <CartButton href="/cart">
             <span>Carrello</span>
             <Badge value={cartCount} />
-          </NavButton>
+          </CartButton>
         </nav>
 
         {/* MOBILE left: burger */}
-        <div className="absolute inset-y-0 left-0 flex md:hidden items-center">
+        <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
           <button
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
             aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
-            className="inline-flex items-center justify-center rounded-lg border border-white/30 px-3 py-2 text-white hover:bg-white/10 transition"
+            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-3 py-2 text-white shadow-[0_0_22px_rgba(139,92,246,0.06)] transition hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z" />
+            <svg
+              width="21"
+              height="21"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="text-white"
+            >
+              <path
+                d="M5 7.25H19"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+              <path
+                d="M8 12H16"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+              <path
+                d="M5 16.75H19"
+                stroke="currentColor"
+                strokeWidth="1.7"
+                strokeLinecap="round"
+              />
+              <path
+                d="M6.5 7.25C8.7 5.45 15.3 5.45 17.5 7.25"
+                stroke="currentColor"
+                strokeWidth="0.6"
+                strokeLinecap="round"
+                opacity="0.32"
+              />
+              <path
+                d="M6.5 16.75C8.7 18.55 15.3 18.55 17.5 16.75"
+                stroke="currentColor"
+                strokeWidth="0.6"
+                strokeLinecap="round"
+                opacity="0.32"
+              />
             </svg>
           </button>
         </div>
 
         {/* MOBILE right: cart */}
-        <div className="absolute inset-y-0 right-0 flex md:hidden items-center">
+        <div className="absolute inset-y-0 right-0 flex items-center md:hidden">
           <Link
             href="/cart"
             aria-label="Vai al carrello"
-            className="inline-flex items-center justify-center p-2 text-white hover:opacity-90 transition"
+            className="inline-flex items-center justify-center rounded-full border border-[#8b5cf6]/30 bg-[#8b5cf6]/10 px-3 py-2 text-white shadow-[0_0_22px_rgba(139,92,246,0.10)] transition hover:bg-[#8b5cf6]/15"
             title="Carrello"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" className="text-white">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              className="text-white"
+            >
               <path
-                fill="currentColor"
-                d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2Zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2ZM7.16 14.26l.03.01L19 14l1.1-7H6.21l-.2-1H3V4h2.4l2.72 9.39-1.96.87Z"
+                d="M7.5 9.5H16.5L17.25 19H6.75L7.5 9.5Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.55"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M9.25 9.5V8.25C9.25 6.75 10.45 5.5 12 5.5C13.55 5.5 14.75 6.75 14.75 8.25V9.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.55"
+                strokeLinecap="round"
+              />
+              <path
+                d="M8.75 12.25H15.25"
+                stroke="currentColor"
+                strokeWidth="0.65"
+                strokeLinecap="round"
+                opacity="0.35"
               />
             </svg>
-            <sup className="ml-0.5 -mt-3 inline-block align-super text-[10px] leading-none text-white">
+
+            <sup className="ml-1 -mt-3 inline-flex min-w-[16px] items-center justify-center rounded-full border border-[#a78bfa]/50 bg-black/60 px-1 text-[10px] font-semibold leading-none text-[#ddd6fe]">
               {cartCount}
             </sup>
           </Link>
@@ -308,15 +396,15 @@ export default function Navbar() {
         id="mobile-menu"
         ref={mobileRef}
         className={[
-          'md:hidden border-t border-white/10 bg-black/90 backdrop-blur',
-          mobileOpen ? 'max-h-[520px] opacity-100' : 'max-h-0 opacity-0',
+          'border-t border-white/10 bg-black/95 backdrop-blur md:hidden',
+          mobileOpen ? 'max-h-[560px] opacity-100' : 'max-h-0 opacity-0',
           'overflow-hidden transition-all duration-300 ease-out',
         ].join(' ')}
       >
-        <div className="px-6 py-4 space-y-3 text-white">
+        <div className="space-y-3 px-6 py-4 text-white">
           <Link
             href="/search"
-            className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+            className="block rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/80 transition hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:text-white"
           >
             Cerca
           </Link>
@@ -325,21 +413,25 @@ export default function Navbar() {
           {showAuth ? (
             isAuthenticated ? (
               <>
-                <div className="px-4 py-2 rounded-lg border border-white/10">
-                  <p className="text-xs text-white/50">Loggato come</p>
-                  <p className="text-sm font-medium truncate">{user?.email}</p>
+                <div className="rounded-xl border border-[#8b5cf6]/20 bg-white/[0.03] px-4 py-3">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#a78bfa]/75">
+                    Loggato come
+                  </p>
+                  <p className="mt-1 truncate text-sm font-medium text-white">
+                    {user?.email}
+                  </p>
                 </div>
 
                 <Link
                   href="/account"
-                  className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+                  className="block rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/80 transition hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:text-white"
                 >
                   Il mio account
                 </Link>
 
                 <button
                   onClick={onLogout}
-                  className="w-full text-left rounded-lg border border-white/20 px-4 py-3 text-sm text-red-400 hover:bg-white/10 transition"
+                  className="w-full rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-left text-sm text-red-300 transition hover:bg-white/10 hover:text-red-200"
                 >
                   Esci
                 </button>
@@ -347,21 +439,21 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="block rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+                className="block rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/80 transition hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:text-white"
               >
                 Accedi
               </Link>
             )
           ) : (
-            <div className="h-12 bg-white/15 animate-pulse rounded-lg" aria-label="Caricamento account"></div>
+            <div className="h-12 animate-pulse rounded-xl bg-white/15" aria-label="Caricamento account"></div>
           )}
 
           <Link
             href="/cart"
-            className="flex items-center justify-between rounded-lg border border-white/20 px-4 py-3 text-sm hover:bg-white/10 transition"
+            className="flex items-center justify-between rounded-xl border border-[#8b5cf6]/30 bg-[#8b5cf6]/10 px-4 py-3 text-sm font-medium text-white transition hover:border-[#a78bfa]/55 hover:bg-[#8b5cf6]/15"
           >
             <span>Carrello</span>
-            <span className="inline-flex min-w-[20px] items-center justify-center rounded-full border border-white/50 px-1.5 text-[11px] font-semibold text-white leading-none">
+            <span className="inline-flex min-w-[22px] items-center justify-center rounded-full border border-[#a78bfa]/50 bg-black/50 px-1.5 text-[11px] font-semibold leading-none text-[#ddd6fe]">
               {cartCount}
             </span>
           </Link>
