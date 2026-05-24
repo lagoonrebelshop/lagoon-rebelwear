@@ -26,6 +26,40 @@ function CtaScopri({ href = '#shop', label = 'SCOPRI DROP 01' }) {
   );
 }
 
+function VenetianLagoonDivider() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 -top-10 z-10 mx-auto hidden h-20 max-w-5xl px-6 md:block"
+    >
+      <svg
+        viewBox="0 0 1000 120"
+        className="h-full w-full overflow-visible opacity-65"
+        fill="none"
+      >
+        <path
+          d="M10 78 C 110 42, 190 42, 295 78 S 485 114, 590 78 S 785 42, 990 78"
+          stroke="rgba(143,92,255,0.28)"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M120 88 C 215 60, 300 60, 390 88 S 565 116, 660 88 S 835 60, 930 88"
+          stroke="rgba(245,242,236,0.12)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+        <path
+          d="M450 52 C 470 30, 530 30, 550 52"
+          stroke="rgba(143,92,255,0.20)"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function formatEURFromCents(cents) {
   const value = Number(cents || 0) / 100;
   return value.toLocaleString('it-IT', { style: 'currency', currency: 'EUR' });
@@ -212,6 +246,7 @@ export default function Home() {
 
       {/* SHOP */}
       <section id="shop" className="relative bg-neutral-950 text-white px-6 py-20">
+        <VenetianLagoonDivider />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(143,92,255,0.45)] to-transparent" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(143,92,255,0.10),transparent_32%)]" />
 
