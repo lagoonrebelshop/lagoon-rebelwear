@@ -1,5 +1,5 @@
 // app/layout.js
-import { Inter } from 'next/font/google';
+import { EB_Garamond, Manrope } from 'next/font/google';
 import './globals.css';
 
 import Navbar from '@/components/Navbar';
@@ -10,7 +10,17 @@ import TrustBarSlim from '@/components/TrustBarSlim';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { createClient } from '@/lib/supabase-server';
 
-const inter = Inter({ subsets: ['latin'] });
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
+  display: 'swap',
+});
+
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond',
+  display: 'swap',
+});
 
 export const metadata = {
   metadataBase: new URL('https://www.lagoonrebelwear.com'),
@@ -68,7 +78,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="it">
-      <body className={`${inter.className} bg-neutral-900 text-white`}>
+      <body className={`${manrope.className} ${manrope.variable} ${ebGaramond.variable} bg-neutral-900 text-white`}>
         <AuthProvider initialSession={session} initialUser={user}>
           <Navbar />
 
