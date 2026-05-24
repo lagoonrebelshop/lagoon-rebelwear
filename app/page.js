@@ -108,7 +108,7 @@ function getPrimaryStyle(product) {
 
 function getColorButtonClass(colorSlug, active) {
   const base =
-    'h-10 rounded-lg border px-3 text-xs font-bold transition flex items-center justify-center gap-2';
+    'h-10 rounded-lg border px-3 text-xs font-bold transition flex items-center justify-center';
 
   if (active) {
     return `${base} border-[rgba(143,92,255,0.88)] bg-[rgba(143,92,255,0.18)] text-white shadow-[0_0_20px_rgba(143,92,255,0.18)]`;
@@ -419,14 +419,6 @@ export default function Home() {
                                 className={getColorButtonClass(style.color_slug, active)}
                                 aria-pressed={active}
                               >
-                                <span
-                                  className={[
-                                    'h-3 w-3 rounded-full border',
-                                    style.color_slug === 'white'
-                                      ? 'bg-white border-black/30'
-                                      : 'bg-black border-white/30',
-                                  ].join(' ')}
-                                />
                                 {label}
                               </button>
                             );
