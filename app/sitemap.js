@@ -1,7 +1,6 @@
 export default async function sitemap() {
   const base = 'https://www.lagoonrebelwear.com';
 
-  // Rotte statiche principali (aggiungi/modifica qui quando crei nuove pagine)
   const staticRoutes = [
     '/',
     '/search',
@@ -9,12 +8,6 @@ export default async function sitemap() {
     '/privacy',
     '/cookies',
     '/terms',
-    '/login',
-    '/signup',
-    '/reset-password',
-    '/update-password',
-    '/account',
-    '/cart',
   ];
 
   const now = new Date().toISOString();
@@ -22,7 +15,12 @@ export default async function sitemap() {
   return staticRoutes.map((path) => ({
     url: `${base}${path}`,
     lastModified: now,
-    changeFrequency: path === '/' ? 'daily' : 'weekly',
-    priority: path === '/' ? 1.0 : 0.7,
+    changeFrequency: path === '/' ? 'weekly' : 'monthly',
+    priority:
+      path === '/'
+        ? 1.0
+        : path === '/search'
+          ? 0.8
+          : 0.5,
   }));
 }
