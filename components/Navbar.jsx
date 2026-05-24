@@ -5,29 +5,173 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 
+function GondolaProwIcon({ open = false }) {
+  return (
+    <svg
+      width="25"
+      height="25"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={`text-white transition-transform duration-300 ${
+        open ? 'scale-[1.04]' : 'scale-100'
+      }`}
+    >
+      {/* cappello / corno superiore del ferro di prua */}
+      <path
+        d="M15.9 4.25C16.9 4.05 18.15 4.45 18.95 5.25C19.55 5.85 19.8 6.55 19.65 7.2C19.45 8.05 18.55 8.45 17.45 8.35"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.28"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* punta alta interna, più simile al profilo reale */}
+      <path
+        d="M16.05 4.35C16.55 5.85 16.55 7.25 16.05 8.75"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.85"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.65"
+      />
+
+      {/* lama centrale del ferro */}
+      <path
+        d="M8.75 20.25C11.65 17.7 13.75 14.45 15.15 10.35C15.85 8.25 16.15 6.35 15.9 4.25"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.45"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+
+      {/* curva bassa / piede del ferro */}
+      <path
+        d="M8.75 20.25C7.75 18.25 7.9 16.05 9.25 13.95"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.95"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        opacity="0.7"
+      />
+
+      {/* denti orizzontali principali */}
+      <path
+        d="M10.85 17.15H16.25"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.22"
+        strokeLinecap="round"
+      />
+      <path
+        d="M11.95 14.35H17.1"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.22"
+        strokeLinecap="round"
+      />
+      <path
+        d="M12.95 11.55H17.85"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.22"
+        strokeLinecap="round"
+      />
+      <path
+        d="M13.75 8.75H18.35"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.22"
+        strokeLinecap="round"
+      />
+
+      {/* dente basso più corto */}
+      <path
+        d="M9.95 19H14.05"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+        opacity="0.82"
+      />
+
+      {/* controprofilo interno */}
+      <path
+        d="M13.5 10.95C12.75 13.75 11.45 16.2 9.85 18.15"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.65"
+        strokeLinecap="round"
+        opacity="0.34"
+      />
+
+      {/* piccolo dettaglio del cappello, per renderlo più riconoscibile */}
+      <path
+        d="M17.1 5.55C17.65 5.6 18.15 5.85 18.45 6.25"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.65"
+        strokeLinecap="round"
+        opacity="0.48"
+      />
+
+      {/* linea laguna */}
+      <path
+        d="M5.2 20.55H18.75"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="0.65"
+        strokeLinecap="round"
+        opacity="0.24"
+      />
+
+      {/* bagliore purple quando aperto */}
+      {open && (
+        <>
+          <path
+            d="M10.85 17.15H16.25M11.95 14.35H17.1M12.95 11.55H17.85"
+            fill="none"
+            stroke="#a78bfa"
+            strokeWidth="0.45"
+            strokeLinecap="round"
+            opacity="0.7"
+          />
+          <path
+            d="M15.9 4.25C16.9 4.05 18.15 4.45 18.95 5.25"
+            fill="none"
+            stroke="#a78bfa"
+            strokeWidth="0.45"
+            strokeLinecap="round"
+            opacity="0.55"
+          />
+        </>
+      )}
+    </svg>
+  );
+}
+
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
 
-  // UI state
   const [accountOpen, setAccountOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  // refs for click-outside
   const accountRef = useRef(null);
   const mobileRef = useRef(null);
 
   const showAuth = !isLoading;
 
-  // close menus on route change
   useEffect(() => {
     setMobileOpen(false);
     setAccountOpen(false);
   }, [pathname]);
 
-  // ESC closes menus
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -35,37 +179,39 @@ export default function Navbar() {
         setAccountOpen(false);
       }
     };
+
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, []);
 
-  // click outside closes account dropdown
   useEffect(() => {
     const onClickOutside = (e) => {
       if (accountRef.current && !accountRef.current.contains(e.target)) {
         setAccountOpen(false);
       }
     };
+
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
-  // click outside closes mobile panel
   useEffect(() => {
     const onClickOutside = (e) => {
       if (mobileRef.current && !mobileRef.current.contains(e.target)) {
         setMobileOpen(false);
       }
     };
+
     document.addEventListener('mousedown', onClickOutside);
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
-  // lock body scroll when mobile is open
   useEffect(() => {
     if (typeof document === 'undefined') return;
+
     if (mobileOpen) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
+
     return () => {
       document.body.style.overflow = '';
     };
@@ -83,17 +229,19 @@ export default function Navbar() {
     }
   }, [router, signOut]);
 
-  // CART BADGE
   const CART_KEY = 'lr_cart';
   const CART_EVENT = 'lr_cart_updated';
   const [cartCount, setCartCount] = useState(0);
 
   const readCartCount = () => {
     if (typeof window === 'undefined') return 0;
+
     try {
       const raw = localStorage.getItem(CART_KEY);
       const items = raw ? JSON.parse(raw) : [];
+
       if (!Array.isArray(items)) return 0;
+
       return items.reduce((sum, it) => sum + (Number(it.qty) || 0), 0);
     } catch {
       return 0;
@@ -102,6 +250,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const update = () => setCartCount(readCartCount());
+
     update();
 
     const onStorage = (e) => {
@@ -117,19 +266,24 @@ export default function Navbar() {
     };
   }, []);
 
-  // SHRINK ON SCROLL
   const [shrink, setShrink] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setShrink(window.scrollY > 20);
+
+    onScroll();
+
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const logoScale = shrink ? 'scale-90' : 'scale-100';
-  const navHeight = shrink ? 'h-14 md:h-16' : 'h-16 md:h-20';
-  const bgOpacity = shrink ? 'bg-black/95' : 'bg-black/80';
+  const logoScale = shrink ? 'scale-[0.88]' : 'scale-100';
+  const navHeight = shrink ? 'h-[62px] md:h-[82px]' : 'h-[76px] md:h-[112px]';
+  const logoHeight = shrink
+    ? 'h-[54px] md:h-[84px] lg:h-[92px]'
+    : 'h-[66px] md:h-[112px] lg:h-[124px]';
+  const bgOpacity = shrink ? 'bg-black/95' : 'bg-black/82';
 
-  // ✅ MISURA ALTEZZA NAVBAR → scrive --nav-h (serve al layout e al hero)
   useEffect(() => {
     const header = document.getElementById('lr-navbar');
     if (!header) return;
@@ -197,7 +351,6 @@ export default function Navbar() {
       className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 backdrop-blur-md transition-all duration-300 ${bgOpacity}`}
     >
       <div className={`relative mx-auto ${navHeight} max-w-7xl px-4 transition-all duration-300 sm:px-6 lg:px-8`}>
-        {/* LOGO centrato */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <Link
             href="/"
@@ -207,14 +360,13 @@ export default function Navbar() {
             <img
               src="/Logo.png"
               alt="Lagoon Rebel — logo"
-              className="block h-[48px] w-auto brightness-0 invert drop-shadow md:h-[60px] lg:h-[72px]"
+              className={`block w-auto brightness-0 invert drop-shadow-[0_0_18px_rgba(255,255,255,0.10)] transition-[height,filter] duration-300 ${logoHeight}`}
               decoding="async"
-              style={{ maxHeight: '72px' }}
+              style={{ maxHeight: '128px' }}
             />
           </Link>
         </div>
 
-        {/* DESKTOP */}
         <nav
           role="navigation"
           aria-label="Azioni desktop"
@@ -222,7 +374,6 @@ export default function Navbar() {
         >
           <NavButton href="/search">Cerca</NavButton>
 
-          {/* AUTH */}
           {showAuth ? (
             isAuthenticated ? (
               <div className="relative" ref={accountRef}>
@@ -294,59 +445,23 @@ export default function Navbar() {
           </CartButton>
         </nav>
 
-        {/* MOBILE left: burger */}
         <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
           <button
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-menu"
             aria-label={mobileOpen ? 'Chiudi menu' : 'Apri menu'}
-            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/[0.03] px-3 py-2 text-white shadow-[0_0_22px_rgba(139,92,246,0.06)] transition hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10"
+            className={[
+              'inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] text-white',
+              'shadow-[0_0_22px_rgba(139,92,246,0.06)] transition duration-200',
+              'hover:border-[#8b5cf6]/45 hover:bg-[#8b5cf6]/10 hover:shadow-[0_0_24px_rgba(139,92,246,0.14)]',
+              mobileOpen ? 'border-[#8b5cf6]/55 bg-[#8b5cf6]/12' : '',
+            ].join(' ')}
           >
-            <svg
-              width="21"
-              height="21"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              className="text-white"
-            >
-              <path
-                d="M5 7.25H19"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-              />
-              <path
-                d="M8 12H16"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-              />
-              <path
-                d="M5 16.75H19"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-              />
-              <path
-                d="M6.5 7.25C8.7 5.45 15.3 5.45 17.5 7.25"
-                stroke="currentColor"
-                strokeWidth="0.6"
-                strokeLinecap="round"
-                opacity="0.32"
-              />
-              <path
-                d="M6.5 16.75C8.7 18.55 15.3 18.55 17.5 16.75"
-                stroke="currentColor"
-                strokeWidth="0.6"
-                strokeLinecap="round"
-                opacity="0.32"
-              />
-            </svg>
+            <GondolaProwIcon open={mobileOpen} />
           </button>
         </div>
 
-        {/* MOBILE right: cart */}
         <div className="absolute inset-y-0 right-0 flex items-center md:hidden">
           <Link
             href="/cart"
@@ -391,7 +506,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MOBILE MENU PANEL */}
       <div
         id="mobile-menu"
         ref={mobileRef}
@@ -409,7 +523,6 @@ export default function Navbar() {
             Cerca
           </Link>
 
-          {/* AUTH mobile */}
           {showAuth ? (
             isAuthenticated ? (
               <>
