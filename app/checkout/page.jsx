@@ -118,8 +118,8 @@ export default function CheckoutPage() {
           </div>
         </section>
       ) : (
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1fr_380px]">
-          <section className="rounded-2xl border border-white/10 bg-black/40 p-5 sm:p-7">
+        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px]">
+          <section className="min-w-0 rounded-2xl border border-white/10 bg-black/40 p-5 sm:p-7">
             <div>
               <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">
                 Dati cliente
@@ -136,33 +136,33 @@ export default function CheckoutPage() {
 
             <form className="mt-7 grid gap-4">
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="grid gap-2 text-sm">
+                <label className="grid min-w-0 gap-2 text-sm">
                   <span className="text-white/70">Nome</span>
                   <input
                     name="firstName"
                     value={form.firstName}
                     onChange={handleChange}
                     autoComplete="given-name"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                     placeholder="Nome"
                   />
                 </label>
 
-                <label className="grid gap-2 text-sm">
+                <label className="grid min-w-0 gap-2 text-sm">
                   <span className="text-white/70">Cognome</span>
                   <input
                     name="lastName"
                     value={form.lastName}
                     onChange={handleChange}
                     autoComplete="family-name"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                     placeholder="Cognome"
                   />
                 </label>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <label className="grid gap-2 text-sm">
+                <label className="grid min-w-0 gap-2 text-sm">
                   <span className="text-white/70">Email</span>
                   <input
                     name="email"
@@ -170,94 +170,96 @@ export default function CheckoutPage() {
                     value={form.email}
                     onChange={handleChange}
                     autoComplete="email"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                     placeholder="email@esempio.it"
                   />
                 </label>
 
-                <label className="grid gap-2 text-sm">
+                <label className="grid min-w-0 gap-2 text-sm">
                   <span className="text-white/70">Telefono</span>
                   <input
                     name="phone"
                     value={form.phone}
                     onChange={handleChange}
                     autoComplete="tel"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                     placeholder="+39"
                   />
                 </label>
               </div>
 
-              <label className="grid gap-2 text-sm">
+              <label className="grid min-w-0 gap-2 text-sm">
                 <span className="text-white/70">Indirizzo</span>
                 <input
                   name="address"
                   value={form.address}
                   onChange={handleChange}
                   autoComplete="street-address"
-                  className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                   placeholder="Via, numero civico"
                 />
               </label>
 
-              <div className="grid gap-4 sm:grid-cols-[1fr_150px_120px]">
-                <label className="grid gap-2 text-sm">
+              <div className="grid gap-4">
+                <label className="grid min-w-0 gap-2 text-sm">
                   <span className="text-white/70">Città</span>
                   <input
                     name="city"
                     value={form.city}
                     onChange={handleChange}
                     autoComplete="address-level2"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                    className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                     placeholder="Città"
                   />
                 </label>
 
-                <label className="grid gap-2 text-sm">
-                  <span className="text-white/70">CAP</span>
-                  <input
-                    name="postalCode"
-                    value={form.postalCode}
-                    onChange={handleChange}
-                    autoComplete="postal-code"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
-                    placeholder="00000"
-                  />
-                </label>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <label className="grid min-w-0 gap-2 text-sm">
+                    <span className="text-white/70">CAP</span>
+                    <input
+                      name="postalCode"
+                      value={form.postalCode}
+                      onChange={handleChange}
+                      autoComplete="postal-code"
+                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                      placeholder="00000"
+                    />
+                  </label>
 
-                <label className="grid gap-2 text-sm">
-                  <span className="text-white/70">Provincia</span>
-                  <input
-                    name="province"
-                    value={form.province}
-                    onChange={handleChange}
-                    autoComplete="address-level1"
-                    className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
-                    placeholder="VE"
-                  />
-                </label>
+                  <label className="grid min-w-0 gap-2 text-sm">
+                    <span className="text-white/70">Provincia</span>
+                    <input
+                      name="province"
+                      value={form.province}
+                      onChange={handleChange}
+                      autoComplete="address-level1"
+                      className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                      placeholder="VE"
+                    />
+                  </label>
+                </div>
               </div>
 
-              <label className="grid gap-2 text-sm">
+              <label className="grid min-w-0 gap-2 text-sm">
                 <span className="text-white/70">Paese</span>
                 <input
                   name="country"
                   value={form.country}
                   onChange={handleChange}
                   autoComplete="country-name"
-                  className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                   placeholder="Italia"
                 />
               </label>
 
-              <label className="grid gap-2 text-sm">
+              <label className="grid min-w-0 gap-2 text-sm">
                 <span className="text-white/70">Note ordine</span>
                 <textarea
                   name="notes"
                   value={form.notes}
                   onChange={handleChange}
                   rows={4}
-                  className="resize-none rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
+                  className="w-full resize-none rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none transition placeholder:text-white/25 focus:border-[#8b5cf6]/60 focus:bg-white/[0.06]"
                   placeholder="Eventuali indicazioni per la consegna"
                 />
               </label>
@@ -277,7 +279,7 @@ export default function CheckoutPage() {
             </form>
           </section>
 
-          <aside className="h-max rounded-2xl border border-white/10 bg-black/50 p-5 sm:p-6">
+          <aside className="h-max min-w-0 rounded-2xl border border-white/10 bg-black/50 p-5 sm:p-6">
             <p className="text-[11px] uppercase tracking-[0.22em] text-white/45">
               Riepilogo ordine
             </p>

@@ -168,7 +168,9 @@ export default function Page() {
                         alt={`${it.title} - Front`}
                         className={[
                           'absolute inset-0 h-full w-full object-contain transition-opacity duration-300',
-                          hasBack && isFlipped ? 'opacity-0 md:opacity-100' : 'opacity-100',
+                          hasBack && isFlipped
+                            ? 'opacity-0 md:opacity-100'
+                            : 'opacity-100',
                           hasBack ? 'md:group-hover:opacity-0' : '',
                         ].join(' ')}
                         loading="lazy"
@@ -278,6 +280,7 @@ export default function Page() {
             <h3 className="text-[12px] uppercase tracking-[0.2em] text-white/80">
               Riepilogo
             </h3>
+
             <div className="mt-3 h-px bg-white/10" />
 
             <dl className="mt-4 space-y-2 text-sm">
@@ -298,6 +301,7 @@ export default function Page() {
               <span className="text-sm font-semibold uppercase text-white">
                 Totale
               </span>
+
               <span className="font-semibold text-white">
                 {formatEUR(subtotal)}
               </span>
@@ -308,18 +312,16 @@ export default function Page() {
             </p>
 
             <div className="mt-6">
-              <button
-                type="button"
-                disabled
-                className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-md bg-white/40 px-4 py-3 text-sm font-bold uppercase tracking-wide text-black"
-                title="Checkout non ancora attivo"
+              <Link
+                href="/checkout"
+                className="inline-flex w-full items-center justify-center rounded-md bg-white px-4 py-3 text-sm font-bold uppercase tracking-wide text-black transition hover:bg-white/90"
               >
-                Checkout in preparazione
-              </button>
+                Procedi al checkout
+              </Link>
             </div>
 
             <p className="mt-3 text-[11px] text-white/60">
-              Il checkout non è ancora attivo. Nel prossimo step collegheremo il pagamento reale.
+              Potrai controllare i dati dell’ordine prima del pagamento.
             </p>
           </aside>
         </div>
