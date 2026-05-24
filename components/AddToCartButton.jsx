@@ -53,7 +53,7 @@ export default function AddToCartButton({
       type="button"
       onClick={onAdd}
       disabled={isDisabled}
-      className={`rounded-md px-4 py-2 text-sm font-medium text-white ring-1 ring-white/10 transition hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-transparent ${className}`}
+      className={`rounded-lg border border-[rgba(143,92,255,0.46)] bg-[rgba(143,92,255,0.14)] px-4 py-2.5 text-sm font-bold text-white ring-1 ring-[rgba(143,92,255,0.16)] transition hover:border-[rgba(143,92,255,0.78)] hover:bg-[rgba(143,92,255,0.22)] hover:shadow-[0_0_22px_rgba(143,92,255,0.16)] disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.04] disabled:text-white/45 disabled:ring-white/5 disabled:hover:bg-white/[0.04] disabled:hover:shadow-none ${className}`}
       aria-label="Aggiungi al carrello"
     >
       {ok ? 'Aggiunto ✓' : children ?? 'Aggiungi al carrello'}

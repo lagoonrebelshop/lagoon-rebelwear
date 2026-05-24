@@ -74,17 +74,17 @@ function getPrimaryStyle(product) {
 
 function getColorButtonClass(colorSlug, active) {
   const base =
-    'h-10 rounded-md border px-3 text-xs font-semibold transition flex items-center justify-center gap-2';
+    'h-10 rounded-lg border px-3 text-xs font-bold transition flex items-center justify-center gap-2';
 
   if (active) {
-    return `${base} border-white bg-white text-black`;
+    return `${base} border-[rgba(143,92,255,0.88)] bg-[rgba(143,92,255,0.18)] text-white shadow-[0_0_20px_rgba(143,92,255,0.18)]`;
   }
 
   if (colorSlug === 'white') {
-    return `${base} border-white/20 bg-white text-black hover:border-white`;
+    return `${base} border-white/25 bg-white text-black hover:border-[rgba(143,92,255,0.75)] hover:shadow-[0_0_16px_rgba(143,92,255,0.14)]`;
   }
 
-  return `${base} border-white/15 bg-black text-white/80 hover:border-white/40 hover:bg-white/10`;
+  return `${base} border-white/15 bg-black text-white/82 hover:border-[rgba(143,92,255,0.58)] hover:bg-[rgba(143,92,255,0.10)]`;
 }
 
 export default function Home() {
@@ -353,7 +353,7 @@ export default function Home() {
                     {showColorSelector && (
                       <div>
                         <div className="mb-2 flex items-center justify-between gap-3">
-                          <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                          <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lrw-purple)]">
                             Colore
                           </p>
                           <p className="text-[11px] text-white/50 text-right">
@@ -402,7 +402,7 @@ export default function Home() {
 
                     <div>
                       <div className="mb-2 flex items-center justify-between gap-3">
-                        <p className="text-[11px] uppercase tracking-[0.22em] text-white/55">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lrw-purple)]">
                           Taglia
                         </p>
                         <p className="text-[11px] text-white/50 text-right">
@@ -425,10 +425,10 @@ export default function Home() {
                                 }));
                               }}
                               className={[
-                                'h-10 rounded-md border text-xs font-semibold transition',
+                                'h-10 rounded-lg border text-xs font-bold transition',
                                 active
-                                  ? 'border-white bg-white text-black'
-                                  : 'border-white/15 bg-white/[0.03] text-white/75 hover:border-white/40 hover:bg-white/10',
+                                  ? 'border-[rgba(143,92,255,0.88)] bg-[rgba(143,92,255,0.18)] text-white shadow-[0_0_20px_rgba(143,92,255,0.16)]'
+                                  : 'border-white/15 bg-white/[0.03] text-white/72 hover:border-[rgba(143,92,255,0.58)] hover:bg-[rgba(143,92,255,0.09)]',
                               ].join(' ')}
                               aria-pressed={active}
                             >
