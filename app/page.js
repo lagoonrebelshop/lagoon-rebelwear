@@ -31,29 +31,150 @@ function VenetianLagoonDivider() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 -top-10 z-10 mx-auto hidden h-20 max-w-5xl px-6 md:block"
+      className="pointer-events-none absolute inset-x-0 -top-12 z-10 mx-auto hidden h-28 max-w-5xl px-6 md:block"
     >
       <svg
-        viewBox="0 0 1000 120"
-        className="h-full w-full overflow-visible opacity-65"
+        viewBox="0 0 1000 150"
+        className="h-full w-full overflow-visible opacity-75"
         fill="none"
       >
+        {/* linea d'acqua principale */}
         <path
-          d="M10 78 C 110 42, 190 42, 295 78 S 485 114, 590 78 S 785 42, 990 78"
-          stroke="rgba(143,92,255,0.28)"
-          strokeWidth="1.4"
+          d="M20 78 C 115 46, 205 46, 305 78 S 500 110, 610 78 S 805 46, 980 78"
+          stroke="rgba(143,92,255,0.30)"
+          strokeWidth="1.35"
           strokeLinecap="round"
         />
+
+        {/* riflesso lagunare */}
         <path
-          d="M120 88 C 215 60, 300 60, 390 88 S 565 116, 660 88 S 835 60, 930 88"
-          stroke="rgba(245,242,236,0.12)"
+          d="M95 93 C 185 68, 290 68, 380 93 S 560 118, 655 93 S 820 68, 940 93"
+          stroke="rgba(245,242,236,0.11)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+
+        {/* palafitte / fondamenta sommerse */}
+        {[
+          [175, 70, 128],
+          [215, 63, 134],
+          [255, 72, 126],
+          [690, 69, 132],
+          [732, 61, 138],
+          [774, 72, 128],
+          [500, 58, 142],
+        ].map(([x, y1, y2]) => (
+          <path
+            key={`${x}-${y1}-${y2}`}
+            d={`M${x} ${y1} L${x} ${y2}`}
+            stroke="rgba(245,242,236,0.13)"
+            strokeWidth="1"
+            strokeLinecap="round"
+          />
+        ))}
+
+        {/* pali viola quasi invisibili */}
+        {[
+          [195, 76, 126],
+          [235, 72, 130],
+          [712, 75, 128],
+          [752, 70, 134],
+        ].map(([x, y1, y2]) => (
+          <path
+            key={`purple-${x}-${y1}-${y2}`}
+            d={`M${x} ${y1} L${x} ${y2}`}
+            stroke="rgba(143,92,255,0.20)"
+            strokeWidth="1.15"
+            strokeLinecap="round"
+          />
+        ))}
+
+        {/* piccola arcata centrale, richiamo architettonico veneziano */}
+        <path
+          d="M455 57 C 472 34, 528 34, 545 57"
+          stroke="rgba(143,92,255,0.18)"
+          strokeWidth="1.15"
+          strokeLinecap="round"
+        />
+
+        {/* base sommersa */}
+        <path
+          d="M150 132 H285"
+          stroke="rgba(245,242,236,0.08)"
           strokeWidth="1"
           strokeLinecap="round"
         />
         <path
-          d="M450 52 C 470 30, 530 30, 550 52"
-          stroke="rgba(143,92,255,0.20)"
-          strokeWidth="1.2"
+          d="M680 134 H800"
+          stroke="rgba(245,242,236,0.08)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
+function FoundationTexture() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+    >
+      <div className="absolute left-1/2 top-20 h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_50%_50%,rgba(143,92,255,0.10),transparent_62%)] opacity-80" />
+
+      <svg
+        viewBox="0 0 1200 520"
+        className="absolute left-1/2 top-28 hidden h-[520px] w-[1200px] -translate-x-1/2 opacity-[0.18] md:block"
+        fill="none"
+      >
+        {/* acqua */}
+        <path
+          d="M120 190 C 230 150, 330 150, 440 190 S 655 230, 770 190 S 980 150, 1090 190"
+          stroke="rgba(245,242,236,0.20)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+        <path
+          d="M160 224 C 255 198, 345 198, 440 224 S 625 250, 720 224 S 890 198, 1040 224"
+          stroke="rgba(143,92,255,0.28)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+
+        {/* palafitte */}
+        {[
+          [230, 165, 410],
+          [275, 180, 430],
+          [320, 156, 405],
+          [365, 176, 430],
+          [835, 162, 415],
+          [880, 178, 432],
+          [925, 154, 405],
+          [970, 176, 428],
+          [590, 150, 442],
+          [630, 170, 420],
+        ].map(([x, y1, y2]) => (
+          <path
+            key={`${x}-${y1}-${y2}`}
+            d={`M${x} ${y1} L${x} ${y2}`}
+            stroke="rgba(245,242,236,0.18)"
+            strokeWidth="1"
+            strokeLinecap="round"
+          />
+        ))}
+
+        {/* base strutturale */}
+        <path
+          d="M190 407 H405"
+          stroke="rgba(143,92,255,0.22)"
+          strokeWidth="1"
+          strokeLinecap="round"
+        />
+        <path
+          d="M805 410 H1005"
+          stroke="rgba(143,92,255,0.22)"
+          strokeWidth="1"
           strokeLinecap="round"
         />
       </svg>
@@ -243,10 +364,13 @@ export default function Home() {
       </main>
 
       {/* SHOP */}
-      <section id="shop" className="relative bg-neutral-950 text-white px-6 py-20">
+      <section id="shop" className="relative overflow-hidden bg-neutral-950 px-6 py-20 text-white">
         <VenetianLagoonDivider />
+        <FoundationTexture />
+
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(143,92,255,0.45)] to-transparent" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(143,92,255,0.10),transparent_32%)]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-gradient-to-b from-black/35 to-transparent" />
 
         <div className="relative mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
@@ -260,19 +384,32 @@ export default function Home() {
 
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/66 md:text-base">
               Capi essenziali in black & white, rifiniti dal ricamo Foundation Purple.
-              Un primo capitolo nato a Venezia, costruito per restare.
+              Il primo capitolo Lagoon Rebel: nato a Venezia, costruito su fondamenta invisibili ma necessarie.
             </p>
 
-            <div className="mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-3 text-[var(--lrw-purple)]/75">
+            <div className="mx-auto mt-7 flex w-full max-w-md items-center justify-center gap-3 text-[var(--lrw-purple)]/75">
               <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
               <span className="text-[10px] font-bold uppercase tracking-[0.34em]">
-                Nato a Venezia
+                Fondamenta veneziane
               </span>
               <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
             </div>
+
+            <div
+              aria-hidden="true"
+              className="mx-auto mt-5 flex max-w-xs items-end justify-center gap-2 opacity-55"
+            >
+              <span className="h-5 w-px bg-white/16" />
+              <span className="h-8 w-px bg-[rgba(143,92,255,0.34)]" />
+              <span className="h-4 w-px bg-white/12" />
+              <span className="h-10 w-px bg-white/18" />
+              <span className="h-6 w-px bg-[rgba(143,92,255,0.24)]" />
+              <span className="h-9 w-px bg-white/14" />
+              <span className="h-5 w-px bg-white/12" />
+            </div>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {loading && (
               <div className="text-white/70">
                 Caricamento prodotti…
@@ -318,7 +455,7 @@ export default function Home() {
                   key={p.id}
                   variants={cardIn}
                   whileHover={{ y: -4 }}
-                  className="group overflow-hidden rounded-[1.35rem] border border-[rgba(143,92,255,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] shadow-[0_18px_55px_rgba(0,0,0,0.42)] transition hover:border-[rgba(143,92,255,0.36)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.55)] flex flex-col"
+                  className="group flex flex-col overflow-hidden rounded-[1.35rem] border border-[rgba(143,92,255,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.025))] shadow-[0_18px_55px_rgba(0,0,0,0.42)] transition hover:border-[rgba(143,92,255,0.36)] hover:shadow-[0_20px_70px_rgba(0,0,0,0.55)]"
                   onMouseEnter={() => {
                     if (!hasBack) return;
                     setActiveImg((prev) => ({ ...prev, [styleKey]: 2 }));
@@ -370,7 +507,7 @@ export default function Home() {
                   </div>
 
                   <div
-                    className="border-t border-[rgba(143,92,255,0.16)] bg-black/78 px-4 py-4 flex flex-col gap-4"
+                    className="flex flex-col gap-4 border-t border-[rgba(143,92,255,0.16)] bg-black/78 px-4 py-4"
                     onClick={(e) => e.stopPropagation()}
                   >
                     <div className="flex items-center justify-between gap-4">
@@ -378,7 +515,7 @@ export default function Home() {
                         <h3 className="font-editorial truncate text-[1.35rem] leading-none text-[var(--lrw-white)]">
                           {p.name}
                         </h3>
-                        <p className="mt-1 text-xs font-medium text-white/58 truncate">
+                        <p className="mt-1 truncate text-xs font-medium text-white/58">
                           {variantLabel}
                         </p>
                       </div>
@@ -393,7 +530,7 @@ export default function Home() {
                           <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lrw-purple)]">
                             Colore
                           </p>
-                          <p className="text-[11px] text-white/50 text-right">
+                          <p className="text-right text-[11px] text-white/50">
                             {colorLabel}
                           </p>
                         </div>
@@ -434,7 +571,7 @@ export default function Home() {
                         <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--lrw-purple)]">
                           Taglia
                         </p>
-                        <p className="text-[11px] text-white/50 text-right">
+                        <p className="text-right text-[11px] text-white/50">
                           {selectedSize ? `Selezionata: ${selectedSize}` : sizeHelper}
                         </p>
                       </div>
