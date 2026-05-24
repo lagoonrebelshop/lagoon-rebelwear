@@ -232,7 +232,7 @@ export default function Home() {
                 <div className="flex items-center gap-3 text-[var(--lrw-purple)]/80">
                   <span className="h-px w-12 bg-[rgba(143,92,255,0.65)]" />
                   <span className="text-[10px] font-bold uppercase tracking-[0.34em]">
-                    Born in the lagoon
+                    Nato in laguna
                   </span>
                   <span className="h-px w-12 bg-[rgba(143,92,255,0.65)]" />
                 </div>
@@ -259,14 +259,14 @@ export default function Home() {
             </h2>
 
             <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/66 md:text-base">
-              Black and white essentials, finished with Foundation Purple embroidery.
-              A first chapter born in Venice, built to stay.
+              Capi essenziali in black & white, rifiniti dal ricamo Foundation Purple.
+              Un primo capitolo nato a Venezia, costruito per restare.
             </p>
 
             <div className="mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-3 text-[var(--lrw-purple)]/75">
               <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
               <span className="text-[10px] font-bold uppercase tracking-[0.34em]">
-                Venice drop
+                Nato a Venezia
               </span>
               <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
             </div>
