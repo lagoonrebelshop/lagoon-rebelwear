@@ -211,15 +211,32 @@ export default function Home() {
       </main>
 
       {/* SHOP */}
-      <section id="shop" className="bg-neutral-900 text-white py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center">
-            <h2 className="text-3xl md:text-4xl font-bold">
-              Drop 01 — Foundation
-            </h2>
-            <p className="text-white/70 mt-3">
-              Black essentials with Foundation Purple embroidery.
+      <section id="shop" className="relative bg-neutral-950 text-white px-6 py-20">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(143,92,255,0.45)] to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(143,92,255,0.10),transparent_32%)]" />
+
+        <div className="relative mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="lrw-eyebrow mb-4">
+              DROP 01 • FOUNDATION
             </p>
+
+            <h2 className="lrw-section-title text-5xl text-[var(--lrw-white)] md:text-6xl">
+              Foundation
+            </h2>
+
+            <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-white/66 md:text-base">
+              Black and white essentials, finished with Foundation Purple embroidery.
+              A first chapter born in Venice, built to stay.
+            </p>
+
+            <div className="mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-3 text-[var(--lrw-purple)]/75">
+              <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.34em]">
+                Venice drop
+              </span>
+              <span className="h-px flex-1 bg-[rgba(143,92,255,0.45)]" />
+            </div>
           </div>
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
