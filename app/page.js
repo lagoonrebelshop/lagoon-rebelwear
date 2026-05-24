@@ -14,12 +14,14 @@ const cardIn = {
 
 function CtaScopri({ href = '#shop', label = 'SCOPRI DROP 01' }) {
   return (
-    <a href={href} className="group inline-flex flex-col items-start relative overflow-hidden">
-      <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
-      <span className="mt-3 mb-3 tracking-[0.25em] text-sm font-semibold text-white/95 group-hover:text-white relative">
-        <span className="relative">{label}</span>
+    <a
+      href={href}
+      className="group inline-flex items-center gap-3 rounded-full border border-[rgba(143,92,255,0.42)] bg-[rgba(143,92,255,0.10)] px-5 py-3 text-xs font-bold tracking-[0.24em] text-[var(--lrw-purple)] transition hover:border-[rgba(143,92,255,0.85)] hover:bg-[rgba(143,92,255,0.18)] hover:shadow-[0_0_26px_rgba(143,92,255,0.18)]"
+    >
+      <span>{label}</span>
+      <span className="text-base leading-none transition-transform group-hover:translate-x-1">
+        →
       </span>
-      <span className="h-px w-40 bg-white/70 group-hover:bg-white transition-colors" />
     </a>
   );
 }
@@ -154,7 +156,7 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <main className="relative w-full overflow-hidden bg-neutral-900">
+      <main className="relative w-full overflow-hidden bg-neutral-950">
         <section className="relative h-[calc(100svh-var(--nav-h))] min-h-[560px] w-full overflow-hidden bg-black md:min-h-[680px]">
           {/* VIDEO */}
           <video
@@ -169,27 +171,39 @@ export default function Home() {
           </video>
 
           {/* OVERLAY CINEMATICO */}
-          <div className="absolute inset-0 z-10 bg-black/35" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/35 to-black/10" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/45 via-transparent to-transparent" />
+          <div className="absolute inset-0 z-10 bg-black/45" />
+          <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_35%_35%,rgba(143,92,255,0.18),transparent_34%)]" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-black/55 to-black/20" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
+
+          {/* DETTAGLIO EDITORIALE */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 z-10 h-px bg-gradient-to-r from-transparent via-[rgba(143,92,255,0.65)] to-transparent" />
 
           {/* TESTI SOPRA IL VIDEO */}
           <div className="relative z-20 flex h-full w-full items-end">
             <div className="mx-auto w-full max-w-6xl px-6 pb-14 md:pb-20">
-              <p className="mb-3 text-xs tracking-[0.32em] text-white/75 md:text-sm">
+              <p className="lrw-eyebrow mb-4">
                 DROP 01 • FOUNDATION • VENEZIA
               </p>
 
-              <h1 className="max-w-4xl text-5xl font-extrabold leading-[0.95] tracking-tight text-white md:text-7xl">
+              <h1 className="lrw-title max-w-3xl text-[3.7rem] text-[var(--lrw-white)] md:text-[5.6rem]">
                 Lagoon Rebel Wear
               </h1>
 
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/88 md:text-lg">
+              <p className="mt-6 max-w-xl text-base leading-relaxed text-white/82 md:text-lg">
                 Streetwear nato a Venezia. Minimal. Strutturato. Intenzionale.
               </p>
 
-              <div className="mt-9">
+              <div className="mt-9 flex flex-col items-start gap-5">
                 <CtaScopri />
+
+                <div className="flex items-center gap-3 text-[var(--lrw-purple)]/80">
+                  <span className="h-px w-12 bg-[rgba(143,92,255,0.65)]" />
+                  <span className="text-[10px] font-bold uppercase tracking-[0.34em]">
+                    Born in the lagoon
+                  </span>
+                  <span className="h-px w-12 bg-[rgba(143,92,255,0.65)]" />
+                </div>
               </div>
             </div>
           </div>
