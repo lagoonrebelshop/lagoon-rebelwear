@@ -220,7 +220,7 @@ export default function Home() {
                 DROP 01 • FOUNDATION • VENEZIA
               </p>
 
-              <h1 className="lrw-title max-w-3xl text-[3.7rem] text-[var(--lrw-white)] md:text-[5.6rem]">
+              <h1 className="lrw-title max-w-3xl text-[3rem] text-[var(--lrw-white)] sm:text-[3.45rem] md:text-[5.6rem]">
                 Lagoon Rebel Wear
               </h1>
 
