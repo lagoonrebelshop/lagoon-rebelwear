@@ -98,7 +98,7 @@ export default function TrustBarSlim() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(143,92,255,0.5)] to-transparent" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(143,92,255,0.10),transparent_35%)]" />
 
-      <div className="mx-auto max-w-6xl px-6 py-10 md:py-12">
+      <div className="relative mx-auto max-w-6xl px-6 py-10 md:py-12">
         <ul className="grid grid-cols-1 gap-5 text-center sm:grid-cols-3">
           {perks.map((p) => (
             <li
@@ -119,20 +119,20 @@ export default function TrustBarSlim() {
         <div className="mt-8 h-px w-full bg-[linear-gradient(90deg,transparent,rgba(143,92,255,0.28),transparent)]" />
 
         <div className="mt-8">
-          <p className="mb-4 text-center text-xs uppercase tracking-[0.28em] text-[var(--lrw-purple)]">
+          <p className="mb-5 text-center text-xs uppercase tracking-[0.28em] text-[var(--lrw-purple)]">
             Metodi di pagamento accettati
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+          <div className="mx-auto flex max-w-xl flex-wrap items-center justify-center gap-x-7 gap-y-4">
             {payments.map(({ src, alt }) => (
               <div
                 key={src}
-                className="flex h-10 w-[74px] items-center justify-center rounded-xl border border-white/8 bg-white/[0.03] opacity-90 transition hover:border-[rgba(143,92,255,0.26)] hover:bg-white/[0.05] hover:opacity-100"
+                className="flex h-8 items-center justify-center opacity-90 transition hover:opacity-100 hover:drop-shadow-[0_0_8px_rgba(143,92,255,0.22)]"
               >
                 <Image
                   src={src}
                   alt={alt}
-                  width={60}
+                  width={66}
                   height={30}
                   className="object-contain"
                 />
